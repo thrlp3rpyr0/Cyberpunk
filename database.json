@@ -1,0 +1,83 @@
+{
+  "arms": [
+    {
+      "id": "militech-m221",
+      "name": "Militech M-221 Ajax",
+      "serial": "AR-MIL-8892-X",
+      "tag": "TACTICAL RIFLE // MILITARY GRADE",
+      "description": "Fusil de asalto estándar utilizado por las fuerzas de seguridad corporativas de Militech. Alta cadencia de fuego con un sistema de estabilización neumático rediseñado para combate urbano cerrado.",
+      "image": "https://images.unsplash.com/photo-1595590424283-b8f17842773f?q=80&w=400",
+      "stats": {
+        "Daño": "68",
+        "Cadencia": "82",
+        "Precisión": "75",
+        "Alcance": "60"
+      },
+      "mods": ["Mira Holográfica Tier-3", "Silenciador Térmico", "Cargador Ampliado"]
+    },
+    {
+      "id": "arasaka-shigure",
+      "name": "Arasaka Shigure",
+      "serial": "SMG-ARA-0041-A",
+      "tag": "SUBMACHINE GUN // CORPORATE ELITE",
+      "description": "Arma compacta de alta precisión fabricada con polímeros ligeros. Diseñada exclusivamente para los equipos de respuesta rápida y escoltas de la mesa directiva de Arasaka.",
+      "image": "https://images.unsplash.com/photo-1584281722557-013ba0bd2e6d?q=80&w=400",
+      "stats": {
+        "Daño": "44",
+        "Cadencia": "95",
+        "Precisión": "88",
+        "Alcance": "40"
+      },
+      "mods": ["Chip de Smart-Link", "Compensador de Retroceso", "Slot Vacío"]
+    }
+  ],
+  "cyberware": [
+    {
+      "id": "sandevistan-mk5",
+      "name": "QianT Sandevistan Mk.5",
+      "serial": "NEURAL-QT-551",
+      "tag": "NEURAL IMPLANT // OPERATING SYSTEM",
+      "description": "Implante de grado militar que sobreacelera el sistema nervioso del portador, permitiendo ralentizar el tiempo percibido en un 90% durante ráfagas cortas de alta intensidad táctica.",
+      "stats": {
+        "Reflejos": "92",
+        "Batería": "80",
+        "Enfriamiento": "72",
+        "Sincronía": "88"
+      },
+      "mods": ["Disipador de Calor", "Optimizador de Actividad"]
+    }
+  ],
+  "corporations": [
+    {
+      "id": "arasaka-corp",
+      "name": "Arasaka Corporation",
+      "serial": "CORP-ARA-GLOBAL",
+      "tag": "MEGACORPORATION // SECURITY & FINANCE",
+      "description": "Conglomerado global dominante enfocado en seguridad corporativa, banca y manufactura de armamento pesado. Gobernado con puño de hierro por la dinastía Arasaka desde Tokyo.",
+      "stats": {
+        "Poder": "98",
+        "Presencia": "95",
+        "Finanzas": "99",
+        "Seguridad": "94"
+      },
+      "mods": ["División Militar", "Fuerza Netrunner", "Inteligencia"]
+    }
+  ],
+  "districts": [
+    {
+      "id": "watson-district",
+      "name": "Distrito de Watson",
+      "serial": "GEO-NC-ZONE-01",
+      "tag": "DISTRICT // INDUSTRIAL & RESIDENTIAL",
+      "description": "Antiguo motor industrial de la ciudad, ahora convertido en un laberinto de mercados nocturnos, callejones tecnológicos y el centro de operaciones de facciones independientes.",
+      "stats": {
+        "Densidad": "85",
+        "Crimen": "90",
+        "Economía": "35",
+        "Tecnología": "65"
+      },
+      "mods": ["Zona de Muelles", "Centro Médico", "Sub-Red Abierta"]
+    }
+  ]
+}
+
