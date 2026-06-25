@@ -399,3 +399,113 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }, 2000);
 });
+
+/* ==========================================================================
+   NEON HEAVEN // NEXUS DATABASE
+   PARTE 5 — MOTOR DE INYECCIÓN DE DATOS JSON DINEÁMICOS
+   ========================================================================== */
+
+let localDatabaseCache = null; // Guardará los datos del JSON una vez descargados
+
+// 📥 FUNCIÓN DE DESCARGA: CONECTAR ARCHIVO JSON
+async function fetchNexusDatabase() {
+    try {
+        pushLogToTerminal("NET_REQ: ESTABLISHING JSON DATASTREAM LINK...");
+        // Buscamos el archivo local que acabas de crear
+        const response = await fetch('./database.json');
+        
+        if (!response.ok) throw new Error("HTTP_ERROR // UNABLE TO REACH DATABASE.JSON");
+        
+        localDatabaseCache = await response.json();
+        pushLogToTerminal("NET_RES: DATABASE DOWNLOAD COMPLETE. PARSING NODES SUCCESSFUL.");
+    } catch (error) {
+        console.error(error);
+        pushLogToTerminal(`❌ KERNEL_ERR: FETCH FAILED // ${error.message}`);
+    }
+}
+
+// 🏛️ INYECTOR EN EL VIEWPORT CENTRAL
+function renderEntityData(category, index = 0) {
+    if (!localDatabaseCache || !localDatabaseCache[category]) {
+        pushLogToTerminal(`⚠️ DB_WARN: CATEGORY [${category.toUpperCase()}] CONTENT IS CURRENTLY ENCRYPTED OR EMPTY.`);
+        return;
+    }
+
+    const entity = localDatabaseCache[category][index];
+    if (!entity) return;
+
+    // 1. Inyectar Textos Básicos e Identificadores
+    document.getElementById('ent-name').textContent = entity.name.toUpperCase();
+    document.getElementById('ent-serial').textContent = entity.serial;
+    document.getElementById('ent-tag').textContent = entity.tag;
+    document.getElementById('ent-desc').textContent = entity.description;
+
+    // 2. Control Visual de la Imagen/Holograma Táctico
+    const imgElement = document.getElementById('entity-image');
+    if (entity.image) {
+        imgElement.src = entity.image;
+        imgElement.classList.remove('hidden');
+    } else {
+        imgElement.classList.add('hidden'); // Ocultar si la entidad no requiere imagen (ej: Ciberware)
+    }
+
+    // 3. Inyectar Barras de Atributos Dinámicas con porcentajes exactos del JSON
+    const barsContainer = document.getElementById('attribute-bars');
+    barsContainer.innerHTML = ""; // Limpiar barras anteriores
+
+    Object.entries(entity.stats).forEach(([statName, statValue]) => {
+        const attrDiv = document.createElement('div');
+        attrDiv.className = "attribute";
+        attrDiv.innerHTML = `
+            <label>${statName.toUpperCase()}</label>
+            <div class="bar">
+                <div class="fill" style="width: ${statValue}%"></div>
+            </div>
+        `;
+        barsContainer.appendChild(attrDiv);
+    });
+
+    // 4. Inyectar Slots de Modificaciones de Equipamiento
+    const modsGrid = document.querySelector('.mods-grid');
+    modsGrid.innerHTML = ""; // Limpiar slots anteriores
+
+    entity.mods.forEach(modName => {
+        const modCard = document.createElement('div');
+        // Si el texto dice "Slot Vacío", le damos un diseño diferente
+        if (modName.toLowerCase().includes('vacío') || modName.toLowerCase().includes('empty')) {
+            modCard.className = "mod-card empty";
+            modCard.textContent = "[ EMPTY_SLOT ]";
+        } else {
+            modCard.className = "mod-card";
+            modCard.textContent = modName;
+        }
+        modsGrid.appendChild(modCard);
+    });
+
+    pushLogToTerminal(`DB_RENDER: ENTITY [${entity.id.toUpperCase()}] LOADED INTO VIRTUAL MEMORY BUFFER.`);
+}
+
+/* 🔄 ACOPLAMIENTO CON TU MENÚ EXISTENTE
+   Modificamos el listener del menú lateral para que use el inyector JSON */
+function upgradeMenuWithJSON() {
+    const menuButtons = document.querySelectorAll('.database-menu .menu-item');
+    
+    menuButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const category = e.currentTarget.getAttribute('data-category');
+            
+            // Si la categoría tiene datos en el JSON, la inyectamos de inmediato
+            if (localDatabaseCache && localDatabaseCache[category]) {
+                setTimeout(() => {
+                    renderEntityData(category, 0); // Cargamos el primer registro por defecto
+                }, 150); // Pequeño retraso de procesamiento estético
+            }
+        });
+    });
+}
+
+// INICIALIZACIÓN COMPLEMENTARIA
+document.addEventListener("DOMContentLoaded", async () => {
+    await fetchNexusDatabase(); // Descargar el archivo al encender la computadora
+    upgradeMenuWithJSON();      // Enlazar los botones con el inyector
+});
