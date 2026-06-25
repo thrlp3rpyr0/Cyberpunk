@@ -1,0 +1,1318 @@
+/* ==========================================================================
+   NEON HEAVEN // NEXUS DATABASE
+   PARTE 2 — CSS BASE (BLOQUE 1: CONFIGURACIÓN Y EFECTOS CRT)
+   ========================================================================== */
+
+/* 🎨 CONFIGURACIÓN DE COLORES Y VARIABLES MILITARES */
+:root {
+    /* Paleta Solicitada: Rojo oscuro/morado (Guinda Táctico) */
+    --bg-pure: #050206;          /* Fondo negro con un tinte sutil morado */
+    --bg-surface: #120713;       /* Superficie de paneles (Guinda ultra oscuro) */
+    --bg-surface-elev: #1f0c22;  /* Paneles con elevación o selección */
+    
+    /* Tonos de Acento e Iluminación */
+    --primary: #9d143a;          /* Rojo guinda principal */
+    --primary-bright: #ff1e56;   /* Neón brillante para estados activos y bordes */
+    --accent-purple: #5c134f;    /* Morado oscuro de transición táctica */
+    --accent-neon: #df20b9;      /* Magenta/Morado eléctrico para alertas de red */
+    
+    /* Estados de Seguridad */
+    --color-text: #f3e8f4;       /* Texto base (blanco con tinte violeta muy suave) */
+    --color-muted: #866b87;      /* Texto secundario o deshabilitado */
+    --alert-success: #00ff66;    /* Terminal segura / Uplink estable */
+    --alert-warning: #ffb700;    /* Anomalía en el sistema */
+    --alert-danger: #ff003c;     /* Entrada de BLACK ICE / Amenaza crítica */
+
+    /* Fuentes */
+    --font-title: 'Orbitron', sans-serif;
+    --font-data: 'Rajdhani', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+
+    /* Estéticos */
+    --glow-primary:0 0 8px rgba(255, 30, 86, 0.6);
+    --glow-neon: 0 0 10px rgba(223, 32, 185, 0.5);
+    --scanline-speed: 8s;
+}
+
+/* ==========================================================================
+   RESETEO GLOBAL Y COMPORTAMIENTO DE COMPUTADORA
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none; /* Evita que el usuario seleccione texto como en un S.O real */
+    cursor: crosshair; /* Cursor táctico de precisión */
+}
+
+body {
+    background-color: var(--bg-pure);
+    color: var(--color-text);
+    font-family: var(--font-data);
+    font-size: 16px;
+    line-height: 1.4;
+    overflow: hidden; /* Evita scrolls raros del navegador; todo se maneja en el viewport */
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Tipografías por defecto */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-title);
+    letter-spacing: 1px;
+}
+
+/* Barras de scroll personalizadas estilo terminal */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-pure);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-bright);
+}
+
+/* ==========================================================================
+   🌧 CAPAS PARA GLITCH, SCANLINES Y EFECTO CRT (Hardware Viejo)
+   ========================================================================== */
+
+/* Capa CRT: Simula la curvatura del monitor de tubo catódico */
+#crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(5,2,6,0.8) 100%);
+    pointer-events: none; /* Deja pasar los clics */
+    z-index: 9999;
+}
+
+/* Líneas de escaneo en movimiento constante */
+#scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(
+        rgba(18, 7, 19, 0) 50%, 
+        rgba(0, 0, 0, 0.25) 50%
+    ), linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.03),
+        rgba(0, 255, 0, 0.01),
+        rgba(0, 0, 255, 0.03)
+    );
+    background-size: 100% 4px, 6px 100%;
+    pointer-events: none;
+    z-index: 9998;
+}
+
+/* Ruido analógico estático (Grano de monitor militar) */
+#noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 9997;
+}
+
+/* Viñeta para oscurecer las esquinas */
+#vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.9);
+    pointer-events: none;
+    z-index: 9996;
+}
+
+/* Ocultar elementos por defecto a través de JS */
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   NEON HEAVEN // NEXUS DATABASE
+   PARTE 2 — CSS BASE (BLOQUE 2: BOOT SYSTEM & AUTHENTICATION)
+   ========================================================================== */
+
+/* 🟡 SISTEMA DE INICIO (BOOT SCREEN) */
+#boot-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-pure);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px;
+    z-index: 9000;
+    font-family: var(--font-mono);
+}
+
+.boot-matrix {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+}
+
+/* Cascada de logs en texto mono */
+.boot-log-stream {
+    font-size: 0.9rem;
+    color: var(--primary-bright);
+    opacity: 0.7;
+    text-shadow: var(--glow-primary);
+    max-height: 40%;
+    overflow: hidden;
+}
+
+.boot-display {
+    text-align: center;
+    margin-bottom: 10vh;
+}
+
+.boot-logo {
+    font-family: var(--font-title);
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--color-text);
+    text-shadow: var(--glow-neon);
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+}
+
+.boot-subtitle {
+    font-size: 1rem;
+    color: var(--color-muted);
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+}
+
+/* Barra de carga militar */
+.boot-loading-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.loading-bar {
+    width: 100%;
+    height: 12px;
+    border: 1px solid var(--primary);
+    background: rgba(31, 12, 34, 0.5);
+    padding: 2px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
+}
+
+.loading-progress {
+    width: 0%; /* El JS se encargará de escalarla hasta el 100% */
+    height: 100%;
+    background-color: var(--primary-bright);
+    box-shadow: var(--glow-primary);
+    transition: width 0.1s linear;
+}
+
+.boot-status {
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: var(--color-text);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* 🔒 PANTALLA DE AUTENTICACIÓN DE USUARIO */
+#auth-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-pure);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 8500;
+}
+
+.auth-box {
+    background-color: var(--bg-surface);
+    border: 2px solid var(--primary);
+    width: 420px;
+    padding: 30px;
+    box-shadow: 0 0 30px rgba(157, 20, 58, 0.2);
+    position: relative;
+}
+
+/* Detalle estético en esquinas estilo interfaz militar */
+.auth-box::before {
+    content: 'MIL-OS // SECURE_NODE';
+    position: absolute;
+    top: -12px;
+    left: 15px;
+    background: var(--bg-pure);
+    padding: 0 8px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--primary-bright);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(157, 20, 58, 0.3);
+    padding-bottom: 15px;
+}
+
+.auth-header h3 {
+    color: var(--color-text);
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}
+
+.auth-header span {
+    font-family: var(--font-mono);
+    color: var(--alert-danger);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* Cuadro de escaneo biométrico */
+.biometric-scan {
+    width: 100%;
+    height: 100px;
+    background: rgba(31, 12, 34, 0.4);
+    border: 1px solid var(--accent-purple);
+    margin-bottom: 25px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.scan-target {
+    font-family: var(--font-title);
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    letter-spacing: 2px;
+}
+
+/* Línea láser del escáner en movimiento */
+.scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-bright);
+    box-shadow: var(--glow-primary);
+    animation: mil-scanner 3s infinite ease-in-out;
+}
+
+/* Formularios y campos de texto */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--primary-bright);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+}
+
+.input-group input {
+    width: 100%;
+    background-color: var(--bg-pure);
+    border: 1px solid var(--accent-purple);
+    padding: 10px 12px;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: var(--primary-bright);
+    box-shadow: inset 0 0 8px rgba(255, 30, 86, 0.2);
+}
+
+/* Botón de acceso militar */
+.btn-auth {
+    width: 100%;
+    background-color: var(--primary);
+    border: 1px solid var(--primary-bright);
+    color: var(--color-text);
+    font-family: var(--font-title);
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 12px;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+.btn-auth:hover {
+    background-color: var(--primary-bright);
+    box-shadow: var(--glow-primary);
+    color: var(--bg-pure);
+}
+
+.auth-footer {
+    margin-top: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-muted);
+    text-align: center;
+    line-height: 1.3;
+}
+
+/* 🔄 ANIMACIÓN LOGÍSTICA PARA EL ESCÁNER */
+@keyframes mil-scanner {
+    0%, 100% { top: 0%; opacity: 0.3; }
+    50% { top: 100%; opacity: 1; }
+}
+
+/* ==========================================================================
+   NEON HEAVEN // NEXUS DATABASE
+   PARTE 2 — CSS BASE (BLOQUE 3: LAYOUT PRINCIPAL, SIDEBAR Y PERFIL)
+   ========================================================================== */
+
+/* 🖥 ENTORNO PRINCIPAL (NEXUS GRID) */
+#nexus {
+    display: grid;
+    grid-template-columns: 320px 1fr 300px; /* Estructura táctica fija de 3 paneles */
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-pure);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 🧠 SIDEBAR IZQUIERDO (SISTEMA DE CONTROL) */
+#sidebar {
+    background-color: var(--bg-surface);
+    border-right: 1px solid var(--primary);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto; /* Permite scroll interno si la resolución es baja */
+}
+
+/* Perfil del Operador Conectado */
+.user-profile {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 15px;
+    border-bottom: 1px solid rgba(157, 20, 58, 0.3);
+    background: linear-gradient(180deg, rgba(31, 12, 34, 0.4) 0%, rgba(0,0,0,0) 100%);
+}
+
+.avatar-frame {
+    width: 55px;
+    height: 55px;
+    border: 1px solid var(--primary-bright);
+    background-color: var(--bg-surface-elev);
+    position: relative;
+    box-shadow: inset 0 0 10px rgba(255, 30, 86, 0.3);
+}
+
+/* Glitch estático en el cuadro de avatar */
+.avatar-glitch {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(223, 32, 185, 0.15) 0px,
+        rgba(223, 32, 185, 0.15) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+}
+
+.user-status-dot {
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid var(--bg-pure);
+}
+
+.user-status-dot.online {
+    background-color: var(--alert-success);
+    box-shadow: 0 0 6px var(--alert-success);
+}
+
+.user-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.user-name {
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 0.5px;
+}
+
+.user-rank, .user-clearance {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-muted);
+}
+
+.user-clearance {
+    color: var(--primary-bright);
+}
+
+/* 📡 MONITOR DE RED, COORDENADAS Y TIEMPO */
+.network-monitor {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(157, 20, 58, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(5, 2, 6, 0.3);
+}
+
+.sys-time-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.clock {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    color: var(--color-text);
+    text-shadow: var(--glow-primary);
+}
+
+.uptime {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+}
+
+.geo-panel {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    border-left: 2px solid var(--accent-neon);
+    padding-left: 8px;
+}
+
+.geo-title {
+    color: var(--color-muted);
+}
+
+.geo-coords {
+    color: var(--accent-neon);
+    text-shadow: var(--glow-neon);
+}
+
+/* Nodos de Conexión de Red */
+.network-nodes {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 5px;
+}
+
+.node-status {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.node-status .indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-muted);
+}
+
+.node-status .indicator.active {
+    background-color: var(--alert-success);
+    box-shadow: 0 0 5px var(--alert-success);
+}
+
+.node-status .indicator.warning {
+    background-color: var(--alert-warning);
+    box-shadow: 0 0 5px var(--alert-warning);
+}
+
+/* 🔍 BUSCADOR DE BASE DE DATOS TÁCTICA */
+.search-panel {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(157, 20, 58, 0.2);
+}
+
+#search {
+    width: 100%;
+    background-color: var(--bg-pure);
+    border: 1px solid var(--primary);
+    padding: 10px 12px;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#search:focus {
+    border-color: var(--primary-bright);
+    box-shadow: 0 0 8px rgba(255, 30, 86, 0.3);
+}
+
+/* 🎛 CONTROLES RÁPIDOS Y MEDIDORES DE SISTEMA DE SOPORTE */
+.quick-controls {
+    padding: 20px;
+    margin-top: auto; /* Empuja esta sección hacia el fondo del sidebar */
+    border-top: 1px solid rgba(157, 20, 58, 0.2);
+    background: rgba(18, 7, 19, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sys-bar-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sys-bar-stat label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    letter-spacing: 0.5px;
+}
+
+.mini-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--bg-pure);
+    border: 1px solid rgba(157, 20, 58, 0.4);
+    padding: 1px;
+}
+
+.mini-fill {
+    height: 100%;
+    background-color: var(--alert-success);
+}
+
+.mini-fill.warning {
+    background-color: var(--alert-warning);
+}
+
+.mini-fill.danger {
+    background-color: var(--primary-bright);
+    box-shadow: var(--glow-primary);
+}
+
+/* Footer del Sidebar */
+.sidebar-footer {
+    padding: 10px 20px;
+    background-color: var(--bg-pure);
+    border-top: 1px solid var(--primary);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-muted);
+}
+
+/* ==========================================================================
+   NEON HEAVEN // NEXUS DATABASE
+   PARTE 2 — CSS BASE (BLOQUE 4: MENÚ DE LA BASE DE DATOS TÁCTICA)
+   ========================================================================== */
+
+/* Contenedor del Menú en el Sidebar */
+.database-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 15px;
+    gap: 4px;
+    border-bottom: 1px solid rgba(157, 20, 58, 0.2);
+}
+
+/* Estilos base de los botones tácticos */
+.menu-item {
+    background: rgba(31, 12, 34, 0.2);
+    border: 1px solid rgba(157, 20, 58, 0.3);
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: left;
+    padding: 10px 14px;
+    letter-spacing: 1.5px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    outline: none;
+}
+
+/* Efecto Hover: Al pasar el cursor */
+.menu-item:hover {
+    background: rgba(157, 20, 58, 0.15);
+    border-color: var(--primary);
+    color: var(--color-text);
+    padding-left: 20px; /* Desplazamiento sutil táctico */
+    box-shadow: inset 0 0 8px rgba(157, 20, 58, 0.2);
+}
+
+/* Estado Activo: La sección seleccionada actualmente */
+.menu-item.active {
+    background: linear-gradient(90deg, rgba(157, 20, 58, 0.4) 0%, rgba(0,0,0,0) 100%);
+    border-color: var(--primary-bright);
+    color: var(--color-text);
+    font-weight: 700;
+    padding-left: 22px;
+    text-shadow: var(--glow-primary);
+    box-shadow: inset 0 0 12px rgba(255, 30, 86, 0.15);
+}
+
+/* Indicador luminoso a la izquierda exclusivo del botón activo */
+.menu-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--primary-bright);
+    box-shadow: var(--glow-primary);
+}
+
+/* Pequeño subtexto decorativo que simula código en los botones activos (efecto Arasaka) */
+.menu-item.active::after {
+    content: '// L_5';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.65rem;
+    color: var(--primary-bright);
+    opacity: 0.6;
+}
+
+/* Variación estética para el botón restringido "RESTRICTED // EYES ONLY" */
+.menu-item[data-category="restricted"] {
+    border-color: rgba(255, 0, 60, 0.2);
+    color: rgba(255, 232, 244, 0.5);
+}
+
+.menu-item[data-category="restricted"]:hover {
+    background: rgba(255, 0, 60, 0.1);
+    border-color: var(--alert-danger);
+    color: var(--alert-danger);
+    text-shadow: 0 0 6px var(--alert-danger);
+}
+
+.menu-item[data-category="restricted"].active {
+    background: linear-gradient(90deg, rgba(255, 0, 60, 0.3) 0%, rgba(0,0,0,0) 100%);
+    border-color: var(--alert-danger);
+    color: var(--color-text);
+    text-shadow: 0 0 8px var(--alert-danger);
+}
+
+.menu-item[data-category="restricted"].active::before {
+    background-color: var(--alert-danger);
+    box-shadow: 0 0 8px var(--alert-danger);
+}
+
+/* ==========================================================================
+   NEON HEAVEN // NEXUS DATABASE
+   PARTE 2 — CSS BASE (BLOQUE 5: VIEWPORT, TELEMETRÍA HUD Y PANEL DE DATOS)
+   ========================================================================== */
+
+/* 🖥 COLUMNA CENTRAL: MONITOR DE TRABAJO PRINCIPAL */
+#viewport {
+    background-color: rgba(5, 2, 6, 0.95);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Cabecera del Viewport (Título y Métricas de Hardware) */
+#viewport-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--primary);
+    background-color: var(--bg-surface);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.viewport-title h1 {
+    font-size: 1.4rem;
+    color: var(--color-text);
+    text-shadow: var(--glow-primary);
+}
+
+.viewport-title p {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    margin-top: 2px;
+}
+
+/* 📈 HUD de Telemetría (CPU, RAM, Ancho de Banda) */
+.system-telemetry-hud {
+    display: flex;
+    gap: 20px;
+}
+
+.hud-metric {
+    background: rgba(5, 2, 6, 0.5);
+    border: 1px solid rgba(157, 20, 58, 0.4);
+    padding: 6px 12px;
+    display: flex;
+    flex-direction: column;
+    min-width: 80px;
+}
+
+.hud-metric .m-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--primary-bright);
+}
+
+.hud-metric .m-value {
+    font-family: var(--font-title);
+    font-size: 1.1rem;
+    color: var(--color-text);
+    text-shadow: var(--glow-primary);
+}
+
+/* 🗃 VISUALIZADOR CENTRAL DE ARCHIVOS */
+#viewer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    overflow-y: auto;
+    gap: 20px;
+}
+
+/* 🎥 Contenedor del "Holograma" / Imagen Táctica */
+#hologram-container {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(180deg, rgba(31, 12, 34, 0.6) 0%, rgba(5, 2, 6, 0.3) 100%);
+    border: 1px dashed var(--accent-purple);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+#hologram-frame {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#entity-image {
+    max-height: 85%;
+    max-width: 85%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px var(--primary-bright)) sepia(80%) saturate(150%) hue-rotate(290deg);
+    opacity: 0.8;
+}
+
+/* Pestañas de Sub-Navegación de Datos */
+#tabs {
+    display: flex;
+    gap: 5px;
+    border-bottom: 1px solid var(--accent-purple);
+}
+
+.tab {
+    background: transparent;
+    border: none;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 8px 16px;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.tab:hover {
+    color: var(--primary-bright);
+}
+
+.tab.active {
+    color: var(--color-text);
+    border-bottom-color: var(--primary-bright);
+    text-shadow: var(--glow-primary);
+}
+
+/* Ventana de Contenido Activo */
+#content-window {
+    background-color: rgba(18, 7, 19, 0.3);
+    border: 1px solid rgba(157, 20, 58, 0.15);
+    padding: 20px;
+    flex: 1;
+    position: relative;
+}
+
+/* Pantalla de Espera del Sistema */
+.prompt-layer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    padding: 40px 0;
+}
+
+.prompt-icon {
+    font-size: 2rem;
+    color: var(--primary-bright);
+    margin-bottom: 15px;
+    text-shadow: var(--glow-primary);
+}
+
+.prompt-layer h2 {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+/* Encabezado Interno de la Ficha Militar */
+.entity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--accent-purple);
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+.entity-title-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.entity-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--accent-neon);
+    letter-spacing: 1px;
+}
+
+.entity-header h2 {
+    font-size: 1.6rem;
+    color: var(--color-text);
+    text-shadow: var(--glow-primary);
+}
+
+.entity-serial {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--primary-bright);
+    background: rgba(157, 20, 58,0.15);
+    padding: 3px 8px;
+    border: 1px solid var(--primary);
+}
+
+.entity-description {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    opacity: 0.9;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Cuadrícula de Datos Técnicos (Data Grid) */
+.entity-data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.data-box {
+    background: rgba(5, 2, 6, 0.4);
+    border: 1px solid rgba(134, 107, 135, 0.2);
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.data-box label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-muted);
+}
+
+.data-box span {
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    color: var(--color-text);
+    margin-top: 2px;
+}
+
+/* 📊 BARRAS DE ATRIBUTOS TÁCTICOS */
+#attribute-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.attribute {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.attribute label {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text);
+    width: 90px;
+    letter-spacing: 0.5px;
+}
+
+.attribute .bar {
+    flex: 1;
+    height: 10px;
+    background: var(--bg-pure);
+    border: 1px solid rgba(157, 20, 58, 0.4);
+    padding: 1px;
+}
+
+.attribute .fill {
+    height: 100%;
+    background-color: var(--primary-bright);
+    box-shadow: var(--glow-primary);
+}
+
+/* Clases de porcentaje de llenado (Se usarán vía JSON/JS) */
+.fill-92 { width: 92%; }
+.fill-80 { width: 80%; }
+.fill-72 { width: 72%; }
+.fill-61 { width: 61%; }
+.fill-44 { width: 44%; }
+
+/* PANEL DE MODIFICACIONES (SLOTS) */
+#mods-panel header {
+    font-family: var(--font-title);
+    font-size: 0.8rem;
+    color: var(--primary-bright);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.mods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+}
+
+.mod-card {
+    background: rgba(157, 20, 58, 0.1);
+    border: 1px solid var(--primary);
+    padding: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text);
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.mod-card.empty {
+    background: rgba(5, 2, 6, 0.3);
+    border: 1px dashed rgba(134, 107, 135, 0.3);
+    color: var(--color-muted);
+}
+
+/* ==========================================================================
+   NEON HEAVEN // NEXUS DATABASE
+   PARTE 2 — CSS BASE (BLOQUE 6: LIVE LOGS, BLACK ICE & FLOATING WINDOWS)
+   ========================================================================== */
+
+/* 📡 COLUMNA DERECHA: CONSOLA DE MONITOREO TÁCTICO */
+#terminal {
+    background-color: var(--bg-surface);
+    border-left: 1px solid var(--primary);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.terminal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(157, 20, 58, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-title);
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.terminal-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    background-color: var(--primary);
+    padding: 2px 6px;
+    color: var(--color-text);
+}
+
+/* Transmisión de Logs en Vivo */
+#terminal-output {
+    flex: 1;
+    padding: 20px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+}
+
+#terminal-output div {
+    line-height: 1.4;
+    word-break: break-all;
+}
+
+#terminal-output div::before {
+    content: '';
+    color: var(--primary-bright);
+    margin-right: 6px;
+}
+
+#terminal footer {
+    padding: 12px 20px;
+    border-top: 1px solid rgba(157, 20, 58, 0.2);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-muted);
+    background-color: var(--bg-pure);
+}
+
+/* ☠ MONITOR DE AMENAZAS CRÍTICAS DE BLACK ICE */
+#black-ice-monitor {
+    margin: 15px;
+    border: 1px solid rgba(134, 107, 135, 0.2);
+    background: rgba(5, 2, 6, 0.4);
+    padding: 12px;
+    transition: all 0.3s ease;
+}
+
+.ice-header {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-muted);
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(134, 107, 135, 0.1);
+    padding-bottom: 4px;
+}
+
+.ice-alert-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.skull-icon {
+    font-size: 1.8rem;
+    color: var(--color-muted);
+    transition: color 0.3s ease;
+}
+
+.ice-meta h4 {
+    font-family: var(--font-title);
+    font-size: 0.8rem;
+    color: var(--color-text);
+}
+
+.ice-meta p {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-muted);
+}
+
+/* Estado de Infección por ICE Enemigo (Activado por Alerta o JS) */
+#black-ice-monitor.ice-danger {
+    background: rgba(255, 0, 60, 0.15);
+    border-color: var(--alert-danger);
+    box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
+    animation: mil-pulse-red 2s infinite ease-in-out;
+}
+
+#black-ice-monitor.ice-danger .skull-icon {
+    color: var(--alert-danger);
+    text-shadow: 0 0 8px var(--alert-danger);
+}
+
+#black-ice-monitor.ice-danger #ice-status-text,
+#black-ice-monitor.ice-danger .ice-meta p {
+    color: var(--alert-danger);
+    font-weight: bold;
+}
+
+/* 🖥 CAPAS ADICIONALES PARA VENTANAS FLOTANTES DESACOPLABLES */
+.floating-window {
+    position: absolute;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--primary);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 15px rgba(157, 20, 58, 0.15);
+    z-index: 1000;
+    min-width: 280px;
+    max-width: 450px;
+}
+
+.window-header {
+    background-color: var(--bg-surface-elev);
+    border-bottom: 1px solid var(--primary);
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.win-title {
+    font-family: var(--font-title);
+    font-size: 0.75rem;
+    color: var(--color-text);
+    letter-spacing: 0.5px;
+}
+
+.win-close {
+    background: transparent;
+    border: none;
+    color: var(--primary-bright);
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.win-close:hover {
+    color: var(--color-text);
+}
+
+.window-body {
+    padding: 15px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text);
+}
+
+/* Coordenadas de inicio para las ventanas flotantes predeterminadas (Evita encimarse) */
+#win-explorer  { top: 15%; left: 30%; width: 320px; }
+#win-netrunner { top: 45%; left: 35%; width: 380px; }
+#win-radar     { top: 20%; left: 60%; width: 280px; }
+#win-camera    { top: 55%; left: 58%; width: 300px; }
+#win-audio     { top: 70%; left: 25%; width: 280px; }
+
+/* Estilos de los inputs de rango del mezclador de audio */
+.audio-controls-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.audio-channel {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.audio-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: var(--bg-pure);
+    border: 1px solid rgba(157, 20, 58, 0.4);
+    outline: none;
+}
+
+.audio-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--primary-bright);
+    box-shadow: var(--glow-primary);
+}
+
+/* 🚨 SECCIÓN DE NOTIFICACIONES FLOTANTES */
+#notifications-container {
+    position: fixed;
+    bottom: 25px;
+    right: 325px; /* Aparece justo al lado izquierdo del panel del terminal */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9995;
+    pointer-events: none;
+}
+
+.notification {
+    background-color: var(--bg-surface);
+    border-left: 4px solid var(--primary-bright);
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 12px 20px;
+    min-width: 240px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    letter-spacing: 0.5px;
+    pointer-events: auto;
+}
+
+.notification.success { border-left-color: var(--alert-success); }
+.notification.warning { border-left-color: var(--alert-warning); }
+.notification.danger  { border-left-color: var(--alert-danger); }
+
+/* 🔄 ANIMACIÓN LOGÍSTICA DE ADVERTENCIA */
+@keyframes mil-pulse-red {
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 0, 60, 0.2); }
+    50% { box-shadow: 0 0 25px rgba(255, 0, 60, 0.5); background: rgba(255, 0, 60, 0.25); }
+}
