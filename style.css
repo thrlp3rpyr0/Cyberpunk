@@ -1496,3 +1496,34 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
     text-transform: uppercase;
 }
+
+#boot-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease-out;
+}
+
+.boot-matrix {
+    width: 600px;
+    padding: 20px;
+    border: 1px solid var(--neon-blue);
+}
+
+.loading-bar {
+    width: 100%;
+    height: 4px;
+    background: #111;
+    margin-top: 10px;
+}
+
+.loading-progress {
+    height: 100%;
+    background: var(--neon-blue);
+    width: 0%;
+    transition: width 0.3s linear;
+}
