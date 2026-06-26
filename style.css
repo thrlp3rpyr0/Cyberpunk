@@ -1532,3 +1532,22 @@ h1, h2, h3, h4, h5, h6 {
     will-change: opacity, transform;
     pointer-events: none; /* Crucial para que el usuario pueda hacer click a través */
 }
+
+.nav-btn {
+    background: transparent;
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    padding: 10px 20px;
+    font-family: var(--font-orbitron);
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+    text-align: left;
+    margin-top: 10px;
+}
+
+.nav-btn:hover {
+    background: var(--neon-blue);
+    color: black;
+    box-shadow: 0 0 15px var(--neon-blue);
+}
