@@ -3,300 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEON HEAVEN // NEXUS DATABASE SYSTEM</title>
+    <title>NEXUS DATABASE // NEON HEAVEN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- ==========================================================================
-         SISTEMA DE ACCESO Y AUTENTICACIÓN (LOGIN OVERLAY PRINCIPAL)
-         ========================================================================== -->
-    <div id="login-screen" class="login-overlay">
-        <div class="login-box">
-            <div class="terminal-header">
-                <span class="blink">●</span> ICE_BREAKER_PROTOCOL // INITIALIZING LINK...
-            </div>
-            <div class="login-content">
-                <div class="alert-banner">
-                    <p class="crypto-text">SUB-NET: NIGHT_CITY_NET_NODE_04</p>
-                    <p class="crypto-text-alert">WARNING: SYSTEM PROTECTED BY MILITECH WATCHDOG BLACK ICE</p>
-                </div>
-                
-                <div class="terminal-decorations">
-                    <span class="decor-line">[ SECURITY_LEVEL: MAXIMUM ]</span>
-                    <span class="decor-line">[ ENCRYPTION: RSA_4096_CYBER ]</span>
-                </div>
+    <div id="crt-overlay"></div>
+    <div id="scanlines"></div>
+    <div id="noise-overlay"></div>
+    <div id="glitch-overlay"></div>
+    <div id="digital-rain"></div>
+    <div id="vignette"></div>
 
-                <div class="input-container-group">
-                    <div class="input-group">
-                        <label for="netrunner-id">> NETRUNNER_ID:</label>
-                        <div class="input-wrapper">
-                            <input type="text" id="netrunner-id" placeholder="Cachirula_99" autocomplete="off">
-                            <span class="input-cursor">_</span>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="access-key">> ACCESS_DECRYPT_KEY:</label>
-                        <div class="input-wrapper">
-                            <input type="password" id="access-key" placeholder="••••••••" autocomplete="off">
-                            <span class="input-cursor">_</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="login-actions">
-                    <button id="btn-bypass" class="btn-terminal exploit-btn">
-                        <span class="btn-glitch">RUN_BYPASS_EXPLOIT</span>
-                    </button>
-                    <button id="btn-login" class="btn-terminal primary secure-btn">
-                        <span class="btn-glitch">INITIATE_DIRECT_LINK</span>
-                    </button>
-                </div>
+    <div id="boot-screen" data-phase="0">
+        <div class="boot-matrix">
+            <div class="boot-log-stream" id="boot-stream-output">
+                <div>[BIOS] INITIALIZING HARDWARE CORES...</div>
+                <div>[BIOS] CHECKING CYBERWARE UPLINK... OK</div>
             </div>
-            <div id="login-status-msg" class="login-status">> SYSTEM: STANDBY. ENTER NEURAL LINK CREDENTIALS...</div>
-            <div class="login-footer">
-                <span>LOCAL_PORT: 5543 // BYPASS_STATUS: UNLINKED</span>
+            <div class="boot-display">
+                <div class="boot-logo">NEXUS // MIL-OS</div>
+                <div class="boot-subtitle">NEON HEAVEN MILITARY DEFENSE NETWORK</div>
+                <div class="boot-loading-container">
+                    <div class="loading-bar">
+                        <div class="loading-progress" id="boot-progress"></div>
+                    </div>
+                    <div class="boot-status" id="boot-phase-text">PHASE 01: SYSTEM DIAGNOSTIC</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ==========================================================================
-         INTERFAZ OPERATIVA DE LA TERMINAL (UNIFIED NEON LAYOUT)
-         ========================================================================== -->
-    <div class="terminal-container unified-layout hidden-until-auth">
-        
-        <!-- ==========================================================================
-             SIDEBAR DE NAVEGACIÓN // MENU LATERAL DE RECURSOS DE LA RED
-             ========================================================================== -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="status-indicator online"></div>
-                <div class="brand-block">
-                    <h1>NEXUS_DB // v1.0</h1>
-                    <span class="sub-brand">CYBERPUNK RED COMPENDIUM</span>
+    <div id="auth-screen" class="hidden">
+        <div class="auth-box">
+            <header class="auth-header">
+                <h3>RESTRICTED ACCESS</h3>
+                <span>LEVEL 5 CLEARANCE REQUIRED</span>
+            </header>
+            <div class="auth-body">
+                <div class="biometric-scan">
+                    <div class="scan-line"></div>
+                    <div class="scan-target">RETINAL RETICLE</div>
                 </div>
+                <form id="auth-form" onsubmit="return false;">
+                    <div class="input-group">
+                        <label>OPERATOR_ID</label>
+                        <input type="text" id="auth-user" autocomplete="off" placeholder="NEXUS-XXXX">
+                    </div>
+                    <div class="input-group">
+                        <label>CYBER_PASSPHRASE</label>
+                        <input type="password" id="auth-pass" placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-auth">ESTABLISH LINK</button>
+                </form>
             </div>
-            
-            <div class="user-profile-badge">
-                <div class="avatar-stub">⚡</div>
-                <div class="badge-info">
-                    <span class="badge-title">OPERATOR ACTIVE</span>
-                    <span id="operator-display" class="badge-name">CACHIRULA</span>
+            <footer class="auth-footer">WARNING: UNAUTHORIZED LOGINS TRIGGER CYBER-DAEMON COUNTERMEASURES</footer>
+        </div>
+    </div>
+
+    <div id="nexus" class="hidden">
+
+        <aside id="sidebar">
+            <header class="user-profile">
+                <div class="avatar-frame">
+                    <div class="avatar-glitch"></div>
+                    <div class="user-status-dot online"></div>
                 </div>
-            </div>
-            
+                <div class="user-meta">
+                    <div class="user-name">OPERATOR_NETR_01</div>
+                    <div class="user-rank">RANK: CHIEF NETRUNNER</div>
+                    <div class="user-clearance">CLEARANCE: LEVEL 5</div>
+                </div>
+            </header>
+
+            <section class="network-monitor">
+                <div class="sys-time-panel">
+                    <div class="clock" id="sys-clock">00:00:00</div>
+                    <div class="uptime">UPTIME: <span id="sys-uptime">00:00</span></div>
+                </div>
+                <div class="geo-panel">
+                    <span class="geo-title">NEON HEAVEN COORDS:</span>
+                    <span class="geo-coords" id="sys-coords">19.4326° N, 99.1332° W</span>
+                </div>
+                <div class="network-nodes">
+                    <div class="node-status" data-node="nh-gateway"><span class="indicator active"></span>GW_NH-01</div>
+                    <div class="node-status" data-node="militech-hub"><span class="indicator active"></span>MIL_NET_SUB</div>
+                    <div class="node-status" data-node="orbital-link"><span class="indicator warning"></span>SAT_LINK_3</div>
+                </div>
+            </section>
+
+            <section class="search-panel">
+                <input type="text" id="search" placeholder="QUERY NEXUS CORE..." autocomplete="off">
+            </section>
+
             <nav class="database-menu">
-                <button class="menu-item active" data-category="arms">
-                    <span class="menu-icon">⚡</span>
-                    <div class="menu-text-group">
-                        <span class="menu-title">ARMS</span>
-                        <span class="menu-desc">Arsenal & Ordnance</span>
-                    </div>
-                </button>
-                <button class="menu-item" data-category="cyberware">
-                    <span class="menu-icon">👁️</span>
-                    <div class="menu-text-group">
-                        <span class="menu-title">CYBERWARE</span>
-                        <span class="menu-desc">Neural & Neuralware Implants</span>
-                    </div>
-                </button>
-                <button class="menu-item" data-category="software">
-                    <span class="menu-icon">💾</span>
-                    <div class="menu-text-group">
-                        <span class="menu-title">SOFTWARE</span>
-                        <span class="menu-desc">Netrunner Utilities</span>
-                    </div>
-                </button>
-                <button class="menu-item" data-category="restricted">
-                    <span class="menu-icon">💀</span>
-                    <div class="menu-text-group">
-                        <span class="menu-title">RESTRICTED</span>
-                        <span class="menu-desc">Black ICE Threat-Level</span>
-                    </div>
-                </button>
-                <button class="menu-item" data-category="biotech">
-                    <span class="menu-icon">🧪</span>
-                    <div class="menu-text-group">
-                        <span class="menu-title">BIOTECH</span>
-                        <span class="menu-desc">Nanotech & Biotech Cores</span>
-                    </div>
-                </button>
-                <button class="menu-item" data-category="vehicles">
-                    <span class="menu-icon">🛸</span>
-                    <div class="menu-text-group">
-                        <span class="menu-title">VEHICLES</span>
-                        <span class="menu-desc">Aerodynes & Combat Armor</span>
-                    </div>
-                </button>
-                <button class="menu-item" data-category="corporations">
-                    <span class="menu-icon">🏢</span>
-                    <div class="menu-text-group">
-                        <span class="menu-title">CORPORATIONS</span>
-                        <span class="menu-desc">Global Mega-Corps Intel</span>
-                    </div>
-                </button>
-                <button class="menu-item" data-category="districts">
-                    <span class="menu-icon">📍</span>
-                    <div class="menu-text-group">
-                        <span class="menu-title">DISTRICTS</span>
-                        <span class="menu-desc">Night City Mapping Data</span>
-                    </div>
-                </button>
+                <button class="menu-item active" data-category="arms">ORDNANCE // ARMS</button>
+                <button class="menu-item" data-category="cyberware">BIOMECHANICS // CYBERWARE</button>
+                <button class="menu-item" data-category="vehicles">TACTICAL VEHICLES</button>
+                <button class="menu-item" data-category="corporations">CORP CONGLOMERATES</button>
+                <button class="menu-item" data-category="districts">COMBAT ZONES // DISTRICTS</button>
+                <button class="menu-item" data-category="gangs">THREAT GROUPS // GANGS</button>
+                <button class="menu-item" data-category="npc">PERSONNEL // HVT</button>
+                <button class="menu-item" data-category="missions">OPERATIONS // MISSIONS</button>
+                <button class="menu-item" data-category="daemons">OFFENSIVE DAEMONS</button>
+                <button class="menu-item" data-category="netrunning">NET ARCHITECTURE</button>
+                <button class="menu-item" data-category="blackmarket">BLACK MARKET LOGISTICS</button>
+                <button class="menu-item" data-category="medical">TRAUMA DATA // MEDICAL</button>
+                <button class="menu-item" data-category="chemicals">HAZMAT // CHEMICALS</button>
+                <button class="menu-item" data-category="files">ENCRYPTED CORES</button>
+                <button class="menu-item" data-category="restricted">RESTRICTED // EYES ONLY</button>
             </nav>
 
-            <!-- CONSOLA DE LOGS DEL SISTEMA (LOG STREAM PRINCIPAL) -->
-            <div class="terminal-logs-panel">
-                <div class="logs-header">
-                    <span>TERMINAL_LOGS // HOST: LOCAL_SUBNET</span>
-                    <span class="logs-refresh-indicator">AUTO_SYNC</span>
+            <section class="quick-controls">
+                <div class="sys-bar-stat">
+                    <label>🔋 POWER APU</label>
+                    <div class="mini-bar"><div class="mini-fill" id="power-level" style="width: 88%;"></div></div>
                 </div>
-                <div id="terminal-log-stream" class="logs-stream">
-                    <p class="log-line systems-check">> KERNEL: BOOT SEQUENCE COMPILED...</p>
-                    <p class="log-line">> CORE_SYS: INITIALIZING SECURE LINK BUFFER...</p>
+                <div class="sys-bar-stat">
+                    <label>🌡 THERMAL</label>
+                    <div class="mini-bar"><div class="mini-fill warning" id="thermal-level" style="width: 42%;"></div></div>
                 </div>
-            </div>
+                <div class="sys-bar-stat">
+                    <label>🤖 CORP AI LINK</label>
+                    <div class="mini-bar"><div class="mini-fill danger" id="ai-integrity" style="width: 95%;"></div></div>
+                </div>
+            </section>
+
+            <footer class="sidebar-footer">
+                <div>BUILD // 2.0.45</div>
+                <div>SECURE_SRV // NH-M_01</div>
+            </footer>
         </aside>
 
-        <!-- ==========================================================================
-             VIEWPORT CENTRAL // VISOR MAESTRO DE ARCHIVOS DE INTELIGENCIA
-             ========================================================================== -->
-        <main class="viewport" id="content-window">
-            
-            <!-- ENTRADA DE DATOS SUPERIOR (CABECERA DE ENTIDADES CON PAGINACIÓN) -->
-            <div id="viewport-header" class="entity-header">
-                <div class="entity-title-block">
-                    <span id="ent-tag" class="entity-tag">TACTICAL RIFLE // MILITARY GRADE</span>
-                    <h2 id="ent-name">STREAMING ARMS CORE...</h2>
+        <main id="viewport">
+            <header id="viewport-header">
+                <div class="viewport-title">
+                    <h1 id="current-db-title">MILITECH TACTICAL DATABASE</h1>
+                    <p>CORE CONNECTION: REPLICATED DATA // DECRYPTED_</p>
                 </div>
-                
-                <!-- CONTROLES TÁCTICOS RECONSTRUIDOS DE PAGINACIÓN INTERACTIVA -->
-                <div class="interface-controls-wrapper" style="display: flex; align-items: center; gap: 20px;">
-                    <div class="tactical-pagination-module" style="display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.5); padding: 4px 8px; border: 1px solid rgba(255, 42, 95, 0.2); border-radius: 2px;">
-                        <button id="nav-prev-entity" class="pag-btn" style="background: rgba(157, 20, 58, 0.2); border: 1px solid #9d143a; color: #ffffff; cursor: pointer; padding: 3px 12px; font-weight: bold; font-family: monospace; transition: all 0.2s;">◀</button>
-                        <span id="nav-entity-counter" class="pag-counter" style="color: #ff2a5f; font-family: monospace; font-size: 0.85rem; min-width: 45px; text-align: center; font-weight: bold; letter-spacing: 1px;">1 / 1</span>
-                        <button id="nav-next-entity" class="pag-btn" style="background: rgba(157, 20, 58, 0.2); border: 1px solid #9d143a; color: #ffffff; cursor: pointer; padding: 3px 12px; font-weight: bold; font-family: monospace; transition: all 0.2s;">▶</button>
+                <div class="system-telemetry-hud">
+                    <div class="hud-metric">
+                        <span class="m-label">CPU</span>
+                        <span class="m-value" id="cpu-load">00%</span>
+                        <div class="sparkline" id="cpu-sparkline"></div>
                     </div>
-                    <div class="serial-block-wrapper" style="display: flex; flex-direction: column; align-items: flex-end;">
-                        <span class="serial-label" style="font-size: 0.65rem; color: rgba(255,255,255,0.4); font-family: monospace;">NODE_INDEX_SERIAL</span>
-                        <span id="ent-serial" class="entity-serial">AR-MIL-8892-X</span>
+                    <div class="hud-metric">
+                        <span class="m-label">RAM</span>
+                        <span class="m-value" id="ram-load">0.0 GB</span>
+                    </div>
+                    <div class="hud-metric">
+                        <span class="m-label">BNDWDTH</span>
+                        <span class="m-value" id="bandwidth-load">0.0 MB/S</span>
                     </div>
                 </div>
-            </div>
+            </header>
 
-            <!-- CUERPO PRINCIPAL DEL VISOR DE ARCHIVOS DE NIGHT CITY -->
-            <div class="viewport-body">
-                
-                <!-- SUB-SECCIÓN: VISUALIZACIÓN GRÁFICA / HOLOGRAMA IZQUIERDO -->
-                <div class="visual-panel">
-                    <div class="hologram-viewport-container">
-                        <div class="hologram-corner-brackets top-left"></div>
-                        <div class="hologram-corner-brackets top-right"></div>
-                        <div class="hologram-corner-brackets bottom-left"></div>
-                        <div class="hologram-corner-brackets bottom-right"></div>
-                        
-                        <div class="hologram-frame">
-                            <img id="entity-image" src="" alt="Hologram Grid View" class="hidden">
-                            <div class="scan-line"></div>
-                            <div class="grid-overlay-mesh"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="data-block-desc-container">
-                        <div class="desc-header">📂 ARCHIVE_INTELLIGENCE_SUMMARY //</div>
-                        <p id="ent-desc" class="entity-description">
-                            Cargando registros balísticos y técnicos desde el servidor central de la subred... El retraso en la sincronización puede ser provocado por firewalls remotos de Arasaka o MiliTech.
-                        </p>
+            <section id="viewer">
+                <div id="hologram-container">
+                    <div id="hologram-frame">
+                        <div class="hologram-glitch-layer"></div>
+                        <img id="entity-image" src="" alt="NO ENTITY DATA LOADED">
                     </div>
                 </div>
 
-                <!-- SUB-SECCIÓN: TABLAS DE ESTADÍSTICAS Y SLOT DE COMPONENTES DERECHO -->
-                <div class="stats-panel">
-                    
-                    <!-- MATRIZ DE RENDIMIENTO DINÁMICA -->
-                    <div class="stats-section core-performance-matrix">
-                        <div class="section-title-wrapper">
-                            <span class="decor-dot"></span>
-                            <h3>DATOS DE RENDIMIENTO // REGLAMENTO ROJO</h3>
-                        </div>
-                        <div id="attribute-bars" class="attribute-bars-container">
-                            <!-- Inyección dinámica de barras de progreso (Daño, ROF, Humanidad, etc.) -->
-                        </div>
+                <div id="tabs">
+                    <button class="tab active" data-tab="overview">OVERVIEW</button>
+                    <button class="tab" data-tab="stats">TACTICAL STATS</button>
+                    <button class="tab" data-tab="history">HISTORY FILES</button>
+                    <button class="tab" data-tab="mods">MODIFICATION CORES</button>
+                    <button class="tab" data-tab="files">DOWNLOAD RECORDS</button>
+                </div>
+
+                <section id="content-window">
+                    <div id="system-prompt-screen" class="prompt-layer">
+                        <div class="prompt-icon">⚠️</div>
+                        <h2>AWAITING DATA INJECTION</h2>
+                        <p>EXECUTE A SEARCH QUERY OR SELECT A DIRECTORY COMPONENT TO LOAD INTEL RECORD GRAPHS.</p>
                     </div>
 
-                    <!-- RECEPTÁCULO DE UPGRADES / RANURAS MÓDULO -->
-                    <div class="mods-section expansion-slots-matrix">
-                        <div class="section-title-wrapper">
-                            <span class="decor-dot"></span>
-                            <h3>RANURAS DE EXPANSIÓN // HARDWARE MODS</h3>
-                        </div>
-                        <div class="mods-grid">
-                            <!-- Inyección dinámica de ranuras activas o [ SLOT_EMPTY ] -->
-                        </div>
-                    </div>
-
-                    <!-- CONTENEDOR ESPECÍFICO DE INTELIGENCIA DE TERRENO (RECONSTRUIDO) -->
-                    <div class="tactical-intel-footer-block">
-                        <div class="intel-header-sub">🗺️ SUBNET_LOCATION_INDEX // DATA_FIELD</div>
-                        <div class="intel-table-grid">
-                            <div class="intel-row">
-                                <span class="intel-label">ARCHIVE_STATUS:</span>
-                                <span id="intel-status-val" class="intel-value verified">DECRYPTED_VALID</span>
+                    <div id="active-entity-view" class="hidden">
+                        <header class="entity-header">
+                            <div class="entity-title-block">
+                                <span class="entity-tag" id="ent-category">ORDNANCE</span>
+                                <h2 id="ent-name">MILITECH M-31A1</h2>
                             </div>
-                            <div class="intel-row">
-                                <span class="intel-label">RESTRICTION_CLASS:</span>
-                                <span id="intel-class-val" class="intel-value restricted-alert">MIL_SPEC_LEVEL_3</span>
+                            <div class="entity-serial" id="ent-id">ID #000014</div>
+                        </header>
+
+                        <div class="entity-description" id="ent-desc">
+                            Select tactical archive to stream.
+                        </div>
+
+                        <div class="entity-data-grid" id="ent-grid">
                             </div>
+
+                        <div id="attribute-bars">
+                            </div>
+
+                        <div id="mods-panel" class="hidden">
+                            <header>COMPATIBLE SYSTEMS / HARDWARE SLOTS</header>
+                            <div class="mods-grid" id="ent-mods"></div>
                         </div>
                     </div>
-
-                </div>
-
-            </div>
-
-            <!-- ==========================================================================
-                 SECCIÓN INFERIOR COMPLETA // BITÁCORA TÉCNICA Y MONITORES DE SISTEMA
-                 ========================================================================== -->
-            <div class="viewport-footer-metadata-panel">
-                <div class="footer-meta-tab">
-                    <span class="tab-indicator active"></span>
-                    <h4>SYS_DIAGNOSTICS // EXTRA_DATA_FEED</h4>
-                </div>
-                <div class="footer-meta-content-grid">
-                    <div class="meta-card">
-                        <span class="meta-card-title">NET_ARCHITECTURE_DEPTH</span>
-                        <p class="meta-card-value" id="meta-architecture-depth">7 NODOS INTERNOS</p>
-                    </div>
-                    <div class="meta-card">
-                        <span class="meta-card-title">BUFFER_OVERFLOW_RISK</span>
-                        <p class="meta-card-value warning-text" id="meta-overflow-risk">0.02% ATK_VULN</p>
-                    </div>
-                    <div class="meta-card">
-                        <span class="meta-card-title">DECK_INTERFACE_LOAD</span>
-                        <p class="meta-card-value" id="meta-deck-load">320 MHz // SYNC_OK</p>
-                    </div>
-                    <div class="meta-card">
-                        <span class="meta-card-title">BLACK_ICE_COUNTERMEASURE</span>
-                        <p class="meta-card-value secure-text" id="meta-countermeasures">READY // BYPASS.EXE</p>
-                    </div>
-                </div>
-                <div class="footer-system-ticker">
-                    <div class="ticker-wrapper">
-                        <span class="ticker-item">SYSTEM_NOTICE: Maelstrom cyber-activity spikes detected in Watson District...</span>
-                        <span class="ticker-item">DATA_ALERT: Trauma Team AV-4 responses delayed in Combat Zone sector 03...</span>
-                        <span class="ticker-item">NETWORK_SYNC: Netwatch actively refreshing regional ICE infrastructure...</span>
-                    </div>
-                </div>
-            </div>
-
+                </section>
+            </section>
         </main>
+
+        <aside id="terminal">
+            <header class="terminal-header">
+                <span>LIVE CORE FEED</span>
+                <span class="terminal-badge">SYS_LOG</span>
+            </header>
+            
+            <div id="terminal-output">
+                <div>> NEXUS INTERFACE LOADED SUCCESSFULY.</div>
+                <div>> SECUR_CORE SENSORS: CALIBRATED.</div>
+            </div>
+
+            <div id="black-ice-monitor" class="ice-safe">
+                <div class="ice-header">
+                    <span>INTRUSION DETECTION SYSTEM</span>
+                    <span id="ice-status-text">ICE_CLEAN</span>
+                </div>
+                <div class="ice-alert-box">
+                    <div class="skull-icon">☠</div>
+                    <div class="ice-meta">
+                        <h4>BLACK ICE INTRUSION</h4>
+                        <p id="ice-type">NONE DETECTED</p>
+                    </div>
+                </div>
+            </div>
+
+            <footer>GRID_STATUS // SECURE</footer>
+        </aside>
+
+        <div id="notifications-container">
+            </div>
+
+        <div class="floating-window hidden" id="win-explorer" data-window="explorer">
+            <header class="window-header">
+                <span class="win-title">📂 FILE SYSTEM EXPLORER</span>
+                <button class="win-close">×</button>
+            </header>
+            <div class="window-body">
+                <div class="directory-tree">
+                    <div class="dir-node root">root/nh_defense/</div>
+                    <div class="dir-node folder open">└─┬ logs/</div>
+                    <div class="dir-node file">│ ├── incident_report_2026.log</div>
+                    <div class="dir-node file">│ └── sub_net_breach.txt</div>
+                    <div class="dir-node folder">└─┬ schematics/</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="floating-window hidden" id="win-netrunner" data-window="netrunner">
+            <header class="window-header">
+                <span class="win-title">🌐 NETRUN TERMINAL v4.1</span>
+                <button class="win-close">×</button>
+            </header>
+            <div class="window-body terminal-body">
+                <div class="terminal-history" id="netrun-history">
+                    <div>NETRUNNER APPARATUS INITIALIZED...</div>
+                    <div>ENTER DAEMON TARGET INJECT PROTOCOL_</div>
+                </div>
+                <div class="terminal-input-line">
+                    <span>guest@nexus_core:~$</span>
+                    <input type="text" id="netrun-input" autocomplete="off">
+                </div>
+            </div>
+        </div>
+
+        <div class="floating-window hidden" id="win-radar" data-window="radar">
+            <header class="window-header">
+                <span class="win-title">🛰 TACTICAL RADAR GRID</span>
+                <button class="win-close">×</button>
+            </header>
+            <div class="window-body radar-wrapper">
+                <div class="radar-ping-circle">
+                    <div class="radar-sweep"></div>
+                    <div class="radar-blip threat" style="top:30%; left:60%;"></div>
+                    <div class="radar-blip ally" style="top:70%; left:40%;"></div>
+                </div>
+                <div class="radar-telemetry-overlay">RANGE: 2.5KM // ACTIVE SCAN</div>
+            </div>
+        </div>
+
+        <div class="floating-window hidden" id="win-camera" data-window="camera">
+            <header class="window-header">
+                <span class="win-title">🎥 SURVEILLANCE // LIVE CAM FEED</span>
+                <button class="win-close">×</button>
+            </header>
+            <div class="window-body camera-container">
+                <div class="cam-noise-layer"></div>
+                <div class="cam-overlay-text">CAM_01 // DISTRICT_09 // LIVEFEED</div>
+                <div class="camera-lens-view">
+                    <span class="rec-dot"></span> REC 22:42:11
+                </div>
+            </div>
+        </div>
+
+        <div class="floating-window hidden" id="win-audio" data-window="audio">
+            <header class="window-header">
+                <span class="win-title">🔊 AUDIO MIXER MATRIX</span>
+                <button class="win-close">×</button>
+            </header>
+            <div class="window-body audio-controls-grid">
+                <div class="audio-channel">
+                    <label>SYS_AMBIENT</label>
+                    <input type="range" class="audio-slider" id="vol-ambient" min="0" max="100" value="70">
+                </div>
+                <div class="audio-channel">
+                    <label>UI_CLICKS</label>
+                    <input type="range" class="audio-slider" id="vol-ui" min="0" max="100" value="90">
+                </div>
+                <div class="audio-channel">
+                    <label>ALERTS_VOX</label>
+                    <input type="range" class="audio-slider" id="vol-alerts" min="0" max="100" value="100">
+                </div>
+            </div>
+        </div>
 
     </div>
 
-    <!-- CONTROLADORES CINÉTICOS DE BACKGROUND (ANIMACIÓN DE MATRIZ DE FONDO) -->
-    <div class="background-matrix-rain-effect"></div>
-
-    <!-- Enlace al archivo de lógica unificada del sistema con soporte para carrusel -->
     <script src="app.js"></script>
 </body>
 </html>
