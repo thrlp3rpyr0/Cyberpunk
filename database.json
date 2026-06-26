@@ -215,3 +215,15 @@
     }
   ]
 }
+
+"gear": [
+    {
+      "id": "agent-comms",
+      "name": "Biodyne Agent V9",
+      "serial": "GEAR-BIO-AGENT",
+      "tag": "COMMUNICATIONS // PERSONAL COMPUTER",
+      "description": "El smartphone/computadora de bolsillo estándar del Tiempo del Rojo. Administra llamadas, escaneo de datos locales y proyecciones holográficas básicas de mapas tácticos.",
+      "stats": { "Procesamiento": "80", "Batería": "95", "Señal Satelital": "75", "Cifrado Link": "60" },
+      "mods": ["Chip de Enlace Encriptado", "Batería de Celda Solar"]
+    }
+  ]
