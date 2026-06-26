@@ -609,3 +609,38 @@ function setupDatabaseSearch() {
 document.addEventListener("DOMContentLoaded", () => {
     setTimeout(setupDatabaseSearch, 1000); 
 });
+
+// Dentro de tu función que maneja el cambio de categoría:
+function updateViewportContent(category) {
+    const data = database[category]; // database es tu JSON cargado
+    const container = document.getElementById('ent-grid');
+    container.innerHTML = ''; // Limpiar previo
+
+    if (category === 'gangs') {
+        data.forEach(gang => {
+            const card = document.createElement('div');
+            card.className = 'entity-card';
+            card.innerHTML = `
+                <div class="card-name">${gang.name}</div>
+                <div class="card-desc">${gang.description}</div>
+                <div class="card-threat">NIVEL AMENAZA: ${gang.stats["Nivel Amenaza"]}</div>
+            `;
+            container.appendChild(card);
+        });
+    }
+    // ... resto de tu lógica de renderizado
+}
+
+let database = {};
+
+async function initNexus() {
+    try {
+        const response = await fetch('database.json');
+        database = await response.json();
+        console.log("NEXUS CORE // DATABASE LOADED // READY");
+    } catch (err) {
+        console.error("CRITICAL ERROR: DATA_INJECTION_FAILED", err);
+    }
+}
+
+initNexus();
