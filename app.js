@@ -665,3 +665,31 @@ function exportToFoundry(id) {
     const blob = new Blob([JSON.stringify(foundryItem)], {type: "application/json"});
     // ... lógica de trigger de descarga
 }
+async function runBootSequence() {
+    const progress = document.getElementById('boot-progress');
+    const log = document.getElementById('boot-stream-output');
+    const steps = [
+        "INITIALIZING HARDWARE CORES...",
+        "CHECKING CYBERWARE UPLINK...",
+        "LOADING ENCRYPTED CORE...",
+        "ESTABLISHING SECURE HANDSHAKE...",
+        "WELCOME, OPERATOR."
+    ];
+
+    for (let i = 0; i <= 100; i += 20) {
+        progress.style.width = `${i}%`;
+        const logLine = document.createElement('div');
+        logLine.textContent = `> [${i}%] ${steps[i/20] || "READY"}`;
+        log.appendChild(logLine);
+        await new Promise(r => setTimeout(r, 600)); // Delay para realismo
+    }
+
+    // Transición al login
+    document.getElementById('boot-screen').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('boot-screen').classList.add('hidden');
+        document.getElementById('auth-screen').classList.remove('hidden');
+    }, 800);
+}
+
+runBootSequence();
