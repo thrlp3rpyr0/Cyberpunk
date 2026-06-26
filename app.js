@@ -693,3 +693,30 @@ async function runBootSequence() {
 }
 
 runBootSequence();
+const AudioController = {
+    sounds: {
+        click: new Audio('assets/sounds/ui_click.mp3'),
+        hover: new Audio('assets/sounds/ui_hover.mp3'),
+        alarm: new Audio('assets/sounds/sys_alarm.mp3')
+    },
+    
+    play(effect) {
+        if(this.sounds[effect]) {
+            this.sounds[effect].currentTime = 0;
+            this.sounds[effect].play();
+        }
+    },
+
+    initAmbient() {
+        const ambient = new Audio('assets/sounds/ambient_loop.mp3');
+        ambient.loop = true;
+        ambient.volume = 0.3;
+        ambient.play();
+    }
+};
+
+// Vinculación automática a botones
+document.querySelectorAll('.menu-item').forEach(btn => {
+    btn.addEventListener('mouseenter', () => AudioController.play('hover'));
+    btn.addEventListener('click', () => AudioController.play('click'));
+});
