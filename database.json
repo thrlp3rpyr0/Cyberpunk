@@ -1,4 +1,4 @@
-{
+ {
   "arms": [
     {
       "id": "militech-arms-ajax",
@@ -62,6 +62,27 @@
       "meta_overflow": "0.02% ATK_VULN",
       "meta_load": "310 MHz // SYNC",
       "meta_countermeasures": "READY // BYPASS.EXE"
+    },
+    {
+      "id": "rostovic-db2",
+      "name": "Rostovic DB-2 Satara",
+      "serial": "SHOT-ROS-SAT-22",
+      "tag": "THERMAL TESLA SHOTGUN // TECH SPEC",
+      "description": "Escopeta exótica de doble cañón que utiliza bobinas de inducción magnética para sobrecalentar perdigones de tungsteno. Capaz de fundir blindajes corporales pesados a corta distancia.",
+      "image": "",
+      "stats": {
+        "Daño (4d6)": "80",
+        "ROF (1)": "15",
+        "Capacidad (2)": "20",
+        "Perforación SP": "85"
+      },
+      "mods": ["Bobinas de Carga Inductiva", "Culata de Impacto Acolchada"],
+      "intel_status": "DECRYPTED_VALID",
+      "intel_class": "STREET_TECH_LEVEL_2",
+      "meta_depth": "3 NODOS INTERNES",
+      "meta_overflow": "0.03% ATK_VULN",
+      "meta_load": "290 MHz // SYNC",
+      "meta_countermeasures": "READY // BYPASS.EXE"
     }
   ],
   "cyberware": [
@@ -106,6 +127,27 @@
       "meta_overflow": "0.04% ATK_VULN",
       "meta_load": "450 MHz // SHIFT",
       "meta_countermeasures": "READY // BYPASS.EXE"
+    },
+    {
+      "id": "dynalar-sandevistan-mkv",
+      "name": "Dynalar Sandevistan Mk.V",
+      "serial": "CYBER-SAND-DYN-05",
+      "tag": "NEURALWARE // SPEEDWARE ACCELERATOR",
+      "description": "Implante neuro-espinal activable de combate. Al encenderse, sobrecarga el sistema nervioso central, ralentizando la percepción del tiempo para el usuario. Otorga un bono crítico a la iniciativa.",
+      "image": "",
+      "stats": {
+        "Iniciativa +3": "98",
+        "Costo Humanidad": "50",
+        "Duración (Turnos)": "30",
+        "Cooldown (Min)": "60"
+      },
+      "mods": ["Disipador Térmico Neuronal", "Batería de Respaldo Química"],
+      "intel_status": "BIOMETRIC_OK",
+      "intel_class": "MIL_SPEC_LEVEL_4",
+      "meta_depth": "6 NODOS INTERNES",
+      "meta_overflow": "0.02% ATK_VULN",
+      "meta_load": "580 MHz // INTEL",
+      "meta_countermeasures": "READY // BYPASS.EXE"
     }
   ],
   "software": [
@@ -128,6 +170,27 @@
       "meta_depth": "1 NODO NET",
       "meta_overflow": "0.00% ATK_VULN",
       "meta_load": "120 MHz // EXEC",
+      "meta_countermeasures": "INJECTED // ACTIVE"
+    },
+    {
+      "id": "program-armor",
+      "name": "Armor.sys",
+      "serial": "SW-NET-DEF-ARMOR",
+      "tag": "DEFENSE PROGRAM // DATA SHIELD",
+      "description": "Subrutina protectora residente en la memoria del Cyberdeck. Absorbe el primer impacto de programas de ataque enemigos antes de colapsar, salvaguardando la integridad neuronal del Netrunner.",
+      "image": "",
+      "stats": {
+        "Protección REZ": "90",
+        "Uso de Memoria": "15",
+        "Estabilidad": "95",
+        "Mitigación Daño": "80"
+      },
+      "mods": ["Algoritmo de Auto-Reparación", "[ SLOT_EMPTY ]"],
+      "intel_status": "COMPILED_OK",
+      "intel_class": "UTILITY_NET",
+      "meta_depth": "1 NODO NET",
+      "meta_overflow": "0.00% ATK_VULN",
+      "meta_load": "95 MHz // EXEC",
       "meta_countermeasures": "INJECTED // ACTIVE"
     }
   ],
@@ -152,6 +215,27 @@
       "meta_overflow": "89.4% OVERFLOW",
       "meta_load": "980 MHz // EXTREME",
       "meta_countermeasures": "WARNING // TRAP.LOG"
+    },
+    {
+      "id": "ice-kraken",
+      "name": "Black ICE: Kraken",
+      "serial": "ICE-KILLER-KRAK-777",
+      "tag": "CLASSIFIED // ULTRA-KILLER BLACK ICE",
+      "description": "Contramedida defensiva corporativa de máximo nivel militar. Manifiesta un avatar de tentáculos de código corrupto diseñado para aplastar terminales de Netrunners veteranos, destruyendo hardware de forma permanente.",
+      "image": "",
+      "stats": {
+        "ATK Kern (2d6)": "99",
+        "Velocidad ICE": "95",
+        "Defensa Rez (45)": "92",
+        "Letalidad Real": "100"
+      },
+      "mods": ["Bucle Descompresor Crítico", "Inyector de Código Parásito"],
+      "intel_status": "CRITICAL_THREAT",
+      "intel_class": "BLACK_ICE_LEVEL_5",
+      "meta_depth": "12 NODOS INTERNAL",
+      "meta_overflow": "94.1% OVERFLOW",
+      "meta_load": "1150 MHz // OVERKILL",
+      "meta_countermeasures": "CRITICAL // WIPE.SH"
     }
   ],
   "biotech": [
@@ -206,7 +290,7 @@
       "name": "Arasaka Security Global",
       "serial": "CORP-ARA-JAPAN",
       "tag": "MEGACORPORATION // MILITARY CONTRACTOR",
-      "description": "Especialistas en la fabricación de armamento pesado, ciberware de élite y ejércitos privados de defensa corporativa. Dominan las sombras de Night City protegiendo los secretos de las mayores sub-redes del planeta.",
+      "description": "Especialistas en la fabricación de armamento pesado, ciberware de élite y ejércitos privados de defense corporativa. Dominan las sombras de Night City protegiendo los secretos de las mayores sub-redes del planeta.",
       "image": "",
       "stats": {
         "Fuerza Militar": "99",
@@ -221,29 +305,18 @@
       "meta_overflow": "0.02% ATK_VULN",
       "meta_load": "320 MHz // SYNC_OK",
       "meta_countermeasures": "READY // BYPASS.EXE"
-    }
-  ],
-  "districts": [
+    },
     {
-      "id": "combat-zone",
-      "name": "La Zona de Combate",
-      "serial": "GEO-NC-CZONE",
-      "tag": "TERRITORY // LAWLESS ANARCHY",
-      "description": "El sector de la ciudad abandonado por completo por la policía (NCPD) y controlado por pandillas fuertemente modificadas como los Maelstrom o los Bozo. La supervivencia aquí exige blindaje corporal y reflejos al límite.",
+      "id": "militech-usa",
+      "name": "Militech International Armaments",
+      "serial": "CORP-MIL-USA",
+      "tag": "MEGACORPORATION // DEFENSE CONTRACTOR",
+      "description": "El gigante industrial y militar norteamericano más poderoso del Time of the Red. Proveedores masivos de armamento ligero, blindados tácticos y mercenarios contratados por gobiernos de todo el globo.",
       "image": "",
       "stats": {
-        "Índice Peligro": "100",
-        "Presencia Gangs": "95",
-        "Sub-Redes Open": "40",
-        "Infraestructura": "10"
+        "Fuerza Militar": "96",
+        "Presencia en Red": "88",
+        "Capital de Guerra": "95",
+        "Seguridad Nodos": "90"
       },
-      "mods": ["Mercados Negros de Cyberware", "Servidores Refugiados Deep Web"],
-      "intel_status": "UNSECURE_ZONE",
-      "intel_class": "HIGH_CRIME_INDEX",
-      "meta_depth": "9 NODOS DISTRIB",
-      "meta_overflow": "45.2% RISK_VULN",
-      "meta_load": "640 MHz // UNSTABLE",
-      "meta_countermeasures": "NONE // DANGER_NODE"
-    }
-  ]
-}
+      "mods":
