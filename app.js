@@ -720,3 +720,18 @@ document.querySelectorAll('.menu-item').forEach(btn => {
     btn.addEventListener('mouseenter', () => AudioController.play('hover'));
     btn.addEventListener('click', () => AudioController.play('click'));
 });
+// En tu app.js, optimiza la carga de datos
+const NexusCore = {
+    async loadAssets() {
+        // Carga prioritaria de la interfaz
+        await initUI();
+        // Carga en segundo plano de la base de datos pesada
+        fetch('database.json')
+            .then(res => res.json())
+            .then(data => {
+                window.nexusDB = data;
+                console.log("CORE // INJECTION COMPLETE");
+            });
+    }
+};
+NexusCore.loadAssets();
