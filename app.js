@@ -735,3 +735,19 @@ const NexusCore = {
     }
 };
 NexusCore.loadAssets();
+
+function openFoundry() {
+    // Sonido de interacción (si tienes el AudioController de la Parte 9)
+    if (typeof AudioController !== 'undefined') {
+        AudioController.play('click');
+    }
+    
+    // Redirección a tu Foundry VTT
+    // Reemplaza con tu URL real (ej: http://localhost:30000 o tu dominio)
+    const foundryUrl = "http://187.188.225.114:30000/"; 
+    
+    // Lo abrimos en una pestaña nueva para no cerrar la terminal NEXUS
+    window.open(foundryUrl, '_blank');
+    
+    console.log("CORE // ESTABLISHING UPLINK TO FOUNDRY...");
+}
