@@ -5,7 +5,7 @@
 
 // CL CLEARANCE CREDENTIALS (Credenciales de Acceso Militar)
 const AUTH_CONFIG = {
-    operatorId: "CACHIRULA-2A",
+    operatorId: "KIRIKO",
     passphrase: "NEON_HEAVEN_MDF"
 };
 
