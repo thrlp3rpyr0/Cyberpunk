@@ -1,397 +1,401 @@
 /* ==========================================================================
-   NEON HEAVEN // SYSTEMS AND DATA MANAGEMENT KERNEL // CORE v3.0 PRO
+   NEON HEAVEN // NEXUS DATABASE
+   PARTE 4 — JAVASCRIPT (BLOQUE 1: CORE CORE & BOOT FLOW)
    ========================================================================== */
 
-// 💾 MEMORIA VOLÁTIL DEL CYBERDECK (ESTADO GLOBAL COMPLETO)
-let localDatabaseCache = null; 
-let currentCategory = "arms";  // Categoría activa inicial
-let currentEntityIndex = 0;    // Índice del objeto en pantalla
-
-// 🎛️ SELECTORES MAESTROS DEL ENTORNO GRÁFICO (HUD DOM)
-const NAV_DOM = {
-    loginOverlay: document.getElementById('login-screen'),
-    btnLogin: document.getElementById('btn-login'),
-    btnBypass: document.getElementById('btn-bypass'),
-    statusMsg: document.getElementById('login-status-msg'),
-    netrunnerInput: document.getElementById('netrunner-id'),
-    terminalContainer: document.querySelector('.terminal-container'),
-    logStream: document.getElementById('terminal-log-stream'),
-    opDisplay: document.getElementById('operator-display'),
-    
-    // Visor Central Cores
-    entName: document.getElementById('ent-name'),
-    entSerial: document.getElementById('ent-serial'),
-    entTag: document.getElementById('ent-tag'),
-    entDesc: document.getElementById('ent-desc'),
-    entImg: document.getElementById('entity-image'),
-    attrContainer: document.getElementById('attribute-bars'),
-    modsGrid: document.querySelector('.mods-grid'),
-    
-    // Adaptación del Subnet e Index Inferior
-    intelStatus: document.getElementById('intel-status-val'),
-    intelClass: document.getElementById('intel-class-val'),
-    metaDepth: document.getElementById('meta-architecture-depth'),
-    metaOverflow: document.getElementById('meta-overflow-risk'),
-    metaLoad: document.getElementById('meta-deck-load'),
-    metaCounter: document.getElementById('meta-countermeasures'),
-    
-    // Flechas del carrusel
-    btnPrev: document.getElementById('nav-prev-entity'),
-    btnNext: document.getElementById('nav-next-entity'),
-    counter: document.getElementById('nav-entity-counter')
+// CL CLEARANCE CREDENTIALS (Credenciales de Acceso Militar)
+const AUTH_CONFIG = {
+    operatorId: "CACHIRULA-2A",
+    passphrase: "NEON_HEAVEN_MDF"
 };
 
-// ==========================================================================
-/* 📺 PARTE 1: LOG STREAM & REAL-TIME MILITARY MONITORS (TELEMETRÍA) */
-// ==========================================================================
+// CONTENEDORES MAESTROS DE LA INTERFAZ
+const DOM = {
+    bootScreen: document.getElementById('boot-screen'),
+    authScreen: document.getElementById('auth-screen'),
+    nexusMain: document.getElementById('nexus'),
+    bootProgress: document.getElementById('boot-progress'),
+    bootText: document.getElementById('boot-phase-text'),
+    clock: document.getElementById('sys-clock'),
+    uptime: document.getElementById('sys-uptime'),
+    authForm: document.getElementById('auth-form'),
+    authUserInput: document.getElementById('auth-user'),
+    authPassInput: document.getElementById('auth-pass'),
+    terminalOutput: document.getElementById('terminal-output')
+};
 
-function pushLogToTerminal(message) {
-    if (!NAV_DOM.logStream) return;
-
-    const time = new Date().toLocaleTimeString();
-    const logLine = document.createElement('p');
-    logLine.className = "log-line";
-    logLine.innerHTML = `<span style="color: rgba(255,42,95,0.45)">[${time}]</span> <span style="color: #ff2a5f">></span> ${message}`;
-    
-    NAV_DOM.logStream.appendChild(logLine);
-    
-    // Mantener siempre el scroll al límite inferior de forma reactiva
-    NAV_DOM.logStream.scrollTop = NAV_DOM.logStream.scrollHeight;
-
-    // Control de saturación de buffer (eliminar logs viejos para optimizar memoria RAM simulada)
-    if (NAV_DOM.logStream.children.length > 45) {
-        NAV_DOM.logStream.removeChild(NAV_DOM.logStream.firstChild);
-    }
-}
-
-// SIMULADOR DE TELEMETRÍA MILITAR FLOTANTE (VALORES ALEATORIOS CADA 2 SEGUNDOS)
-function initTelemetryOscillators() {
-    pushLogToTerminal("TELEMETRY: LAUNCHING HARDWARE MONITOR OSCILLATORS...");
-    
-    setInterval(() => {
-        const cpuElement = document.getElementById('hud-cpu-usage');
-        const ramElement = document.getElementById('hud-ram-usage');
-        const bandElement = document.getElementById('hud-bandwidth-load');
-
-        if (cpuElement) {
-            const cpuVal = Math.floor(Math.random() * (92 - 45) + 45);
-            cpuElement.textContent = `${cpuVal}%`;
-            if (cpuVal > 80) cpuElement.className = "telemetry-value alert-text";
-            else cpuElement.className = "telemetry-value";
-        }
-        if (ramElement) {
-            const ramVal = (Math.random() * (14.2 - 11.8) + 11.8).toFixed(1);
-            ramElement.textContent = `${ramVal} GB`;
-        }
-        if (bandElement) {
-            const bandVal = Math.floor(Math.random() * (850 - 610) + 610);
-            bandElement.textContent = `${bandVal} Mbps`;
-        }
-    }, 2000);
-}
-
-// CONTROLLERS PARA EL RELOJ OPERATIVO MILITAR (Uptime del Sistema)
-function startUptimeClock() {
-    const clockElement = document.getElementById('hud-clock-time');
-    const dateElement = document.getElementById('hud-clock-date');
-    
-    if (!clockElement) return;
+// 🕒 CONTROL DE TIEMPO REAL (RELOJ MILITAR)
+function initializeSystemClock() {
+    const startTime = Date.now();
 
     setInterval(() => {
         const now = new Date();
-        clockElement.textContent = now.toTimeString().split(' ')[0];
-        if (dateElement) {
-            dateElement.textContent = now.toISOString().split('T')[0].replace(/-/g, '/');
-        }
+        // Formato 24h denso para el reloj principal
+        DOM.clock.textContent = now.toTimeString().split(' ')[0];
+
+        // Cálculo de Uptime (Tiempo activo desde que cargó)
+        const diffMs = Date.now() - startTime;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffSecs = Math.floor((diffMs % 60000) / 1000);
+        DOM.uptime.textContent = `UPTIME: ${String(diffMins).padStart(2, '0')}:${String(diffSecs).padStart(2, '0')}`;
     }, 1000);
 }
 
-// ==========================================================================
-/* 🔐 PARTE 2: PROTOCOLO DE AUTENTICACIÓN AVANZADA (NETRUNNER BYPASS) */
-// ==========================================================================
+// 🟡 SECUENCIA DE ARRANQUE SIMULADA (BOOT SEQUENCE)
+function triggerBootSequence() {
+    let progress = 0;
+    const phases = [
+        { limit: 20, text: "PHASE 01: HARDWARE DIAGNOSTIC // CHECKING CORES" },
+        { limit: 50, text: "PHASE 02: DECRYPTING CYBERWARE UPLINK ENGINES" },
+        { limit: 80, text: "PHASE 03: BYPASSING MILITECH HARD-FIREWALLS" },
+        { limit: 100, text: "PHASE 04: ESTABLISHING SECURE GATEWAY CONNECTIONS" }
+    ];
 
-function setupAuthProtocols() {
-    if (!NAV_DOM.btnLogin || !NAV_DOM.btnBypass) return;
+    let currentPhaseIdx = 0;
 
-    // Acción A: Conexión mediante credenciales válidas
-    NAV_DOM.btnLogin.addEventListener('click', () => {
-        const idValue = NAV_DOM.netrunnerInput.value.trim() || "CACHIRULA";
-        
-        NAV_DOM.statusMsg.innerHTML = `<span class="blink">></span> AUTH: EXTRACTING RSA_KEY BLOCKS FOR OPERATOR: [${idValue.toUpperCase()}]...`;
-        NAV_DOM.statusMsg.style.color = "#ffcc00";
-        NAV_DOM.btnLogin.disabled = true;
-        NAV_DOM.btnBypass.disabled = true;
+    const bootInterval = setInterval(() => {
+        // Velocidad de carga militar variable aleatoria para mayor realismo
+        progress += Math.floor(Math.random() * 5) + 2;
+        if (progress > 100) progress = 100;
 
-        setTimeout(() => {
-            NAV_DOM.statusMsg.innerHTML = `> VERIFYING DIGITAL SIGNATURE... SUCCESS.`;
-            NAV_DOM.statusMsg.style.color = "#00ff66";
-            
-            if (NAV_DOM.opDisplay) NAV_DOM.opDisplay.textContent = idValue.toUpperCase();
+        DOM.bootProgress.style.width = `${progress}%`;
 
+        // Cambio de fases de texto en el HUD de arranque
+        if (currentPhaseIdx < phases.length && progress >= phases[currentPhaseIdx].limit) {
+            DOM.bootText.textContent = phases[currentPhaseIdx].text;
+            currentPhaseIdx++;
+        }
+
+        if (progress === 100) {
+            clearInterval(bootInterval);
             setTimeout(() => {
-                NAV_DOM.statusMsg.innerHTML = `> DIRECT_LINK ESTABLISHED. LOADING COGNITIVE HUD...`;
-                setTimeout(() => {
-                    executeTerminalBootSequence();
-                }, 600);
-            }, 500);
-        }, 1400);
-    });
-
-    // Acción B: Ejecución de Fuerza Bruta / Ataque Desbordamiento (ICE BREAKER)
-    NAV_DOM.btnBypass.addEventListener('click', () => {
-        NAV_DOM.statusMsg.innerHTML = `<span class="blink">></span> EXPLOIT INJECTED: OVERFLOWING STACK BUFFER ON NODE_04...`;
-        NAV_DOM.statusMsg.style.color = "#ff2a5f";
-        NAV_DOM.btnLogin.disabled = true;
-        NAV_DOM.btnBypass.disabled = true;
-
-        let cycle = 0;
-        const hackerInterval = setInterval(() => {
-            cycle += 1;
-            pushLogToTerminal(`⚡ ICE_BREAKER: RIPPING MILITECH DEFENSIVE LAYER NO. 0${cycle}...`);
-            NAV_DOM.statusMsg.innerHTML = `> INTRUSION PROGRESS: ${cycle * 25}% // CRACKING CYBER_DECK SUITE...`;
-            
-            if (cycle >= 4) {
-                clearInterval(hackerInterval);
-                NAV_DOM.statusMsg.innerHTML = `> CRITICAL SUCCESS // WATCHDOG ICE DEACTIVATED. BYPASS INJECTED.`;
-                NAV_DOM.statusMsg.style.color = "#00ff66";
-
-                if (NAV_DOM.opDisplay) NAV_DOM.opDisplay.textContent = "CACHIRULA (BYPASS)";
-
-                setTimeout(() => {
-                    executeTerminalBootSequence();
-                }, 900);
-            }
-        }, 450);
-    });
+                // Apagamos pantalla de carga y encendemos Login
+                DOM.bootScreen.classList.add('hidden');
+                DOM.authScreen.classList.remove('hidden');
+                pushLogToTerminal("SYS_BOOT: INITIALIZATION COMPLETE. STANDING BY FOR BIOMETRIC LINK.");
+            }, 600);
+        }
+    }, 80);
 }
 
-function executeTerminalBootSequence() {
-    if (NAV_DOM.loginOverlay) NAV_DOM.loginOverlay.classList.add('fade-out');
-    if (NAV_DOM.terminalContainer) NAV_DOM.terminalContainer.classList.remove('hidden-until-auth');
-    
-    pushLogToTerminal("🔑 ACCESS_GRANTED: CORE WORKSTATION UNLOCKED.");
-    pushLogToTerminal("🤖 CRT_SHADERS: SYNCING ANALOG SCANLINE RENDER ENGINE...");
-    
-    // Desplegar animaciones colaterales e iniciar contadores en tiempo real
-    initTelemetryOscillators();
-    startUptimeClock();
-    
-    // Render inicial por defecto de la sección de armas
-    if (localDatabaseCache && localDatabaseCache["arms"]) {
-        renderEntityData("arms", 0);
-    }
-}
+// 🔒 SISTEMA DE AUTENTICACIÓN (LOGIN)
+function setupAuthentication() {
+    DOM.authForm.addEventListener('submit', () => {
+        const userValue = DOM.authUserInput.value.trim();
+        const passValue = DOM.authPassInput.value;
 
-// ==========================================================================
-/* 📥 PARTE 3: CONEXIÓN REMOTA Y ALMACENAMIENTO DE NODOS (JSON BUFFER) */
-// ==========================================================================
-
-async function fetchNexusDatabase() {
-    try {
-        pushLogToTerminal("NET_REQ: ACQUIRING TARGET DATABASE LINK FROM MAIN SUBNET...");
-        const response = await fetch('./database.json');
-        
-        if (!response.ok) throw new Error("HTTP_CORE_ERR // PACKETS DROP DURING DATASTREAM CONNECTION");
-        
-        localDatabaseCache = await response.json();
-        pushLogToTerminal("NET_RES: SECURE MEMORY BUFFER DOWNLOAD COMPLETE. SYSTEM MATRIX VALIDATED.");
-    } catch (error) {
-        console.error(error);
-        pushLogToTerminal(`❌ SYSTEM_MALFUNCTION: SYNCHRONIZATION FALLED // ${error.message}`);
-    }
-}
-
-// ==========================================================================
-/* 🏛️ PARTE 4: MOTOR DE EXPANSIÓN GRÁFICA MULTI-PANEL (CORE RENDER v3) */
-// ==========================================================================
-
-function renderEntityData(category, index = 0) {
-    if (!localDatabaseCache || !localDatabaseCache[category]) {
-        pushLogToTerminal(`⚠️ DB_WARN: ENCRYPTED SUBNET ARCHIVE IN NODE [${category.toUpperCase()}].`);
-        return;
-    }
-
-    const categoryNodes = localDatabaseCache[category];
-    const totalElements = categoryNodes.length;
-    const entity = categoryNodes[index];
-    
-    if (!entity) return;
-
-    // Actualización de punteros de navegación globales
-    currentCategory = category;
-    currentEntityIndex = index;
-
-    // 1. Refrescar el contador numérico militar de paginación
-    if (NAV_DOM.counter) {
-        NAV_DOM.counter.textContent = `${index + 1} / ${totalElements}`;
-    }
-
-    // 2. Inyección Mecánica de Atributos de Identificación de Texto
-    if (NAV_DOM.entName) NAV_DOM.entName.textContent = entity.name.toUpperCase();
-    if (NAV_DOM.entSerial) NAV_DOM.entSerial.textContent = entity.serial;
-    if (NAV_DOM.entTag) NAV_DOM.entTag.textContent = entity.tag;
-    if (NAV_DOM.entDesc) NAV_DOM.entDesc.textContent = entity.description;
-
-    // 3. Control y Estabilización Dinámica de Imagen Holográfica
-    if (NAV_DOM.entImg) {
-        if (entity.image && entity.image !== "") {
-            NAV_DOM.entImg.src = entity.image;
-            NAV_DOM.entImg.classList.remove('hidden');
+        if (userValue === AUTH_CONFIG.operatorId && passValue === AUTH_CONFIG.passphrase) {
+            // Acceso Concedido: Desbloqueamos la base de datos
+            DOM.authScreen.classList.add('hidden');
+            DOM.nexusMain.classList.remove('hidden');
+            pushLogToTerminal(`OPERATOR ${userValue} VERIFIED. SECURITY LEVEL 5 LINK ESTABLISHED.`);
+            initializeSystemClock(); // El reloj empieza a correr al entrar al sistema
         } else {
-            NAV_DOM.entImg.classList.add('hidden');
+            // Intento fallido
+            alert("ACCESS DENIED // INVALID PASSPHRASE. DAEMON RETINAL INTERCEPT TRIGGERED.");
+            DOM.authPassInput.value = "";
+            pushLogToTerminal("WARNING: UNAUTHORIZED EYE-SCAN DETECTED ON NODE_01.");
         }
-    }
-
-    // 4. Inyector Algorítmico de Barras de Rendimiento (Reglamento Cyberpunk RED)
-    if (NAV_DOM.attrContainer) {
-        NAV_DOM.attrContainer.innerHTML = "";
-        
-        Object.entries(entity.stats).forEach(([statName, statValue]) => {
-            const attrRow = document.createElement('div');
-            attrRow.className = "attribute";
-            attrRow.innerHTML = `
-                <label>${statName.toUpperCase()}</label>
-                <div class="bar">
-                    <div class="fill" style="width: ${statValue}%"></div>
-                </div>
-            `;
-            NAV_DOM.attrContainer.appendChild(attrRow);
-        });
-    }
-
-    // 5. Inyector de Ranuras de Expansión / Modificaciones de Hardware
-    if (NAV_DOM.modsGrid) {
-        NAV_DOM.modsGrid.innerHTML = "";
-        
-        entity.mods.forEach(modName => {
-            const modItem = document.createElement('div');
-            if (modName.toLowerCase().includes('vacío') || modName.toLowerCase().includes('empty')) {
-                modItem.className = "mod-card empty";
-                modItem.textContent = "[ SLOT_EMPTY ]";
-            } else {
-                modItem.className = "mod-card";
-                modItem.textContent = modName;
-            }
-            NAV_DOM.modsGrid.appendChild(modItem);
-        });
-    }
-
-    // 6. Inyección de Campos Intermedios de Verificación (Intel Status & Class)
-    if (NAV_DOM.intelStatus && entity.intel_status) NAV_DOM.intelStatus.textContent = entity.intel_status;
-    if (NAV_DOM.intelClass && entity.intel_class) NAV_DOM.intelClass.textContent = entity.intel_class;
-
-    // 7. Sincronización Avanzada con las 4 Fichas de Diagnóstico Técnico del Footer
-    if (NAV_DOM.metaDepth && entity.meta_depth) NAV_DOM.metaDepth.textContent = entity.meta_depth;
-    if (NAV_DOM.metaOverflow && entity.meta_overflow) NAV_DOM.metaOverflow.textContent = entity.meta_overflow;
-    if (NAV_DOM.metaLoad && entity.meta_load) NAV_DOM.metaLoad.textContent = entity.meta_load;
-    if (NAV_DOM.metaCounter && entity.meta_countermeasures) NAV_DOM.metaCounter.textContent = entity.meta_countermeasures;
-
-    pushLogToTerminal(`DB_RENDER: PACKET STREAM FOR [${entity.id.toUpperCase()}] FLOODED INTO SCREEN BUFFERS.`);
-}
-
-// ==========================================================================
-/* 🎛️ PARTE 5: INTERFACE ALIGNMENT & INTERACTIVE PAGINATION (LISTENERS) */
-// ==========================================================================
-
-function setupNavigationMechanics() {
-    if (!NAV_DOM.btnPrev || !NAV_DOM.btnNext) return;
-
-    // Disparador Mecánico de Flecha de Retroceso ◀
-    NAV_DOM.btnPrev.addEventListener('click', () => {
-        if (!localDatabaseCache || !localDatabaseCache[currentCategory]) return;
-        const total = localDatabaseCache[currentCategory].length;
-        
-        let targetIndex = currentEntityIndex - 1;
-        if (targetIndex < 0) targetIndex = total - 1; // Salto cíclico infinito al último elemento
-        
-        renderEntityData(currentCategory, targetIndex);
-    });
-
-    // Disparador Mecánico de Flecha de Avance ▶
-    NAV_DOM.btnNext.addEventListener('click', () => {
-        if (!localDatabaseCache || !localDatabaseCache[currentCategory]) return;
-        const total = localDatabaseCache[currentCategory].length;
-        
-        let targetIndex = currentEntityIndex + 1;
-        if (targetIndex >= total) targetIndex = 0; // Regreso cíclico infinito al primer elemento
-        
-        renderEntityData(currentCategory, targetIndex);
     });
 }
 
-function linkSidebarMenuToDatastream() {
-    const menuButtons = document.querySelectorAll('.database-menu .menu-item');
-    
-    menuButtons.forEach(button => {
+// 📜 UTILIDAD: INYECTOR DE LOGS EN VIVO
+function pushLogToTerminal(message) {
+    const time = new Date().toTimeString().split(' ')[0];
+    const logLine = document.createElement('div');
+    logLine.textContent = `> [${time}] ${message}`;
+    DOM.terminalOutput.appendChild(logLine);
+    DOM.terminalOutput.scrollTop = DOM.terminalOutput.scrollHeight; // Auto-scroll
+}
+
+// INITIALIZATION TRIGGER (Disparador de encendido)
+document.addEventListener("DOMContentLoaded", () => {
+    triggerBootSequence();
+    setupAuthentication();
+});
+
+/* ==========================================================================
+   NEON HEAVEN // NEXUS DATABASE
+   PARTE 4 — JAVASCRIPT (BLOQUE 2: MENÚ DE CATEGORÍAS Y CONTROL DE PESTAÑAS)
+   ========================================================================= */
+
+// REGISTRO DE SELECTORES COMPLEMENTARIOS
+const NAV_DOM = {
+    menuButtons: document.querySelectorAll('.database-menu .menu-item'),
+    tabButtons: document.querySelectorAll('#tabs .tab'),
+    currentTitle: document.getElementById('current-db-title'),
+    promptScreen: document.getElementById('system-prompt-screen'),
+    entityView: document.getElementById('active-entity-view'),
+    // Elementos internos de la ficha para pruebas de flujo
+    entName: document.getElementById('ent-name'),
+    entCategory: document.getElementById('ent-category')
+};
+
+// 🗃 ADMINISTRADOR DE CATEGORÍAS (MENÚ LATERAL)
+function initializeDatabaseMenu() {
+    NAV_DOM.menuButtons.forEach(button => {
         button.addEventListener('click', (e) => {
-            // Eliminar clases activas de la vieja selección
-            menuButtons.forEach(btn => btn.classList.remove('active'));
+            // 1. Quitar estado activo a los demás botones
+            NAV_DOM.menuButtons.forEach(btn => btn.classList.remove('active'));
             
-            const targetBtn = e.currentTarget;
-            targetBtn.classList.add('active');
+            // 2. Activar botón seleccionado
+            const selectedButton = e.currentTarget;
+            selectedButton.classList.add('active');
+
+            // 3. Obtener metadatos tácticos de la categoría
+            const category = selectedButton.getAttribute('data-category');
+            const categoryName = selectedButton.textContent.trim();
+
+            // 4. Actualizar título del Viewport Principal
+            NAV_DOM.currentTitle.textContent = `NEXUS DATABASE // ${categoryName}`;
+
+            // 5. Flujo Visual: Retirar prompt de espera y desplegar ficha vacía lista para el JSON
+            NAV_DOM.promptScreen.classList.add('hidden');
+            NAV_DOM.entityView.classList.remove('hidden');
+
+            // Simulación de carga en ficha técnica antes de conectar la Base de Datos JSON
+            NAV_DOM.entCategory.textContent = category.toUpperCase();
+            NAV_DOM.entName.textContent = `STREAMING ${category.toUpperCase()} CORE...`;
+
+            // Enviar log de rastreo a la terminal derecha
+            pushLogToTerminal(`NEXUS_REQ: ACCESSING CHANNEL [${category.toUpperCase()}]. FETCHING DATA NODES...`);
+        });
+    });
+}
+
+// 📊 CONTROLADOR DE SUB-PESTAÑAS TÁCTICAS
+function initializeTabSystem() {
+    NAV_DOM.tabButtons.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            // 1. Quitar clase activa a las pestañas deseleccionadas
+            NAV_DOM.tabButtons.forEach(t => t.classList.remove('active'));
+
+            // 2. Activar pestaña cliqueada
+            const selectedTab = e.currentTarget;
+            selectedTab.classList.add('active');
+
+            const targetTabName = selectedTab.getAttribute('data-tab').toUpperCase();
+
+            // 3. Informar al terminal sobre el cambio de segmento de memoria
+            pushLogToTerminal(`MEM_SWAP: MEMORY CORE BUFFER SHIFTED TO [${targetTabName}].`);
             
-            const selectedCategory = targetBtn.getAttribute('data-category');
-            if (localDatabaseCache && localDatabaseCache[selectedCategory]) {
-                pushLogToTerminal(`NET_CHG: ROUTING SUBNET ACCESS POINTS TO NODE: [${selectedCategory.toUpperCase()}]`);
-                
-                // Emular retraso de latencia física de terminales analógicas retro-futuristas
-                setTimeout(() => {
-                    renderEntityData(selectedCategory, 0); // Desplegar siempre el primer elemento indexado
-                }, 120);
+            // NOTA: En la Parte 5, aquí incluiremos la lógica que oculta/muestra los contenedores
+            // específicos de Atributos, Historial o Modificaciones de la ficha.
+        });
+    });
+}
+
+// INYECCIÓN DE LISTENERS EN EL DISPARADOR GLOBAL EXISTENTE
+document.addEventListener("DOMContentLoaded", () => {
+    initializeDatabaseMenu();
+    initializeTabSystem();
+});
+
+/* ==========================================================================
+   NEON HEAVEN // NEXUS DATABASE
+   PARTE 4 — JAVASCRIPT (BLOQUE 3: TELEMETRÍA HUD & MONITOR BLACK ICE)
+   ========================================================================== */
+
+// REGISTRO DE SELECTORES DE HARDWARE
+const HUD_DOM = {
+    cpuLoad: document.getElementById('cpu-load'),
+    ramLoad: document.getElementById('ram-load'),
+    bandwidthLoad: document.getElementById('bandwidth-load'),
+    thermalFill: document.getElementById('thermal-level'),
+    powerFill: document.getElementById('power-level'),
+    iceMonitor: document.getElementById('black-ice-monitor'),
+    iceStatusText: document.getElementById('ice-status-text'),
+    iceType: document.getElementById('ice-type')
+};
+
+// 📈 MOTOR DE TELEMETRÍA DE HARDWARE DE ALTA DENSIDAD
+function startHardwareSimulation() {
+    // Valores base operativos militares
+    let baseRam = 4.2;
+    let basePower = 88;
+
+    setInterval(() => {
+        // 1. Fluctuación de la CPU (Cálculo táctico entre 3% y 24% en reposo)
+        const currentCpu = Math.floor(Math.random() * 21) + 3;
+        HUD_DOM.cpuLoad.textContent = `${String(currentCpu).padStart(2, '0')}%`;
+
+        // 2. Fluctuación de Ancho de Banda (Simula descargas de datos del Nexus)
+        const currentBandwidth = (Math.random() * 8 + 1).toFixed(1);
+        HUD_DOM.bandwidthLoad.textContent = `${currentBandwidth} MB/S`;
+
+        // 3. Fluctuación sutil de RAM (Variación microscópica de consumo)
+        const ramDrift = (Math.random() * 0.2 - 0.1);
+        const currentRam = Math.min(Math.max(baseRam + ramDrift, 3.8), 5.4).toFixed(1);
+        HUD_DOM.ramLoad.textContent = `${currentRam} GB`;
+
+        // 4. Fluctuación Térmica correlacionada con el uso de la CPU
+        const targetThermal = Math.min(30 + currentCpu, 95);
+        HUD_DOM.thermalFill.style.width = `${targetThermal}%`;
+
+        // 5. Degradación e inyección de energía lenta en la APU (Batería)
+        if (Math.random() > 0.85) {
+            basePower = basePower + (Math.random() > 0.5 ? 1 : -1);
+            basePower = Math.min(Math.max(basePower, 80), 100);
+            HUD_DOM.powerFill.style.width = `${basePower}%`;
+        }
+
+    }, 2000); // Actualización de ciclos cada 2 segundos
+}
+
+/* ☠ SISTEMA DEFENSIVO: DISPARADOR DE INTENSIFICACIÓN DE BLACK ICE
+   Esta función la llamaremos mediante eventos de hackeo o alertas críticas */
+function triggerBlackIceAlert(iceName = "RAVEN_DAEMON.EXE") {
+    // Cambiar clases CSS del monitor para detonar animaciones de pulso rojo (Bloque 6 CSS)
+    HUD_DOM.iceMonitor.classList.remove('ice-safe');
+    HUD_DOM.iceMonitor.classList.add('ice-danger');
+    
+    // Inyección de cadenas de datos en el monitor de intrusión
+    HUD_DOM.iceStatusText.textContent = "CRITICAL_INTRUSION";
+    HUD_DOM.iceType.textContent = iceName.toUpperCase();
+
+    // Notificaciones y logs de combate en red
+    pushLogToTerminal(`🚨 KERNEL_ALERT: COUNTER-INTRUSION DETECTED! BLACK ICE [${iceName.toUpperCase()}] IS LOCKING CORES.`);
+}
+
+// Apagar alerta y restablecer estado seguro de red
+function clearBlackIceAlert() {
+    HUD_DOM.iceMonitor.classList.remove('ice-danger');
+    HUD_DOM.iceMonitor.classList.add('ice-safe');
+    HUD_DOM.iceStatusText.textContent = "ICE_CLEAN";
+    HUD_DOM.iceType.textContent = "NONE DETECTED";
+    pushLogToTerminal("SYS_MAINT: BLACK ICE PURGED SUCCESSFULLY. DEFENSIIVE NODES RESTORED.");
+}
+
+// INYECCIÓN EN EL FILTRO DE CONTROL DOM
+document.addEventListener("DOMContentLoaded", () => {
+    startHardwareSimulation();
+    
+    // Simulación de prueba: Descomenta la línea de abajo si quieres ver el pulso rojo de Black ICE desde el inicio
+    // triggerBlackIceAlert("Hellhound_V3");
+});
+
+/* ==========================================================================
+   NEON HEAVEN // NEXUS DATABASE
+   PARTE 4 — JAVASCRIPT (BLOQUE 4: DRAG & DROP, AUDIO MATRIX & ALERTS)
+   ========================================================================== */
+
+// REGISTRO DE SELECTORES COMPLEMENTARIOS
+const SYS_DOM = {
+    floatingWindows: document.querySelectorAll('.floating-window'),
+    closeButtons: document.querySelectorAll('.win-close'),
+    notificationContainer: document.getElementById('notifications-container'),
+    audioSliders: document.querySelectorAll('.audio-slider')
+};
+
+// 🖥️ SISTEMA MÓVIL DRAG & DROP (Arrastrar y Soltar Ventanas)
+function setupWindowDragAndDrop() {
+    let activeWindow = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    // Escuchar el clic en la cabecera de la ventana
+    document.querySelectorAll('.window-header').forEach(header => {
+        header.addEventListener('mousedown', (e) => {
+            // Evitar conflictos con el botón de cerrar
+            if (e.target.classList.contains('win-close')) return;
+
+            activeWindow = header.parentElement;
+            
+            // Traer la ventana al frente (Z-Index más alto)
+            document.querySelectorAll('.floating-window').forEach(win => win.style.zIndex = "1000");
+            activeWindow.style.zIndex = "1050";
+
+            // Calcular la distancia entre el mouse y la esquina de la ventana
+            const rect = activeWindow.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+
+            document.addEventListener('mousemove', mouseMoveHandler);
+            document.addEventListener('mouseup', mouseUpHandler);
+        });
+    });
+
+    function mouseMoveHandler(e) {
+        if (!activeWindow) return;
+        
+        // Calcular nuevas coordenadas en la pantalla
+        let newX = e.clientX - offsetX;
+        let newY = e.clientY - offsetY;
+
+        // Limitar el movimiento dentro de la pantalla para evitar perder la ventana
+        newX = Math.max(0, Math.min(newX, window.innerWidth - activeWindow.offsetWidth));
+        newY = Math.max(0, Math.min(newY, window.innerHeight - activeWindow.offsetHeight));
+
+        activeWindow.style.left = `${newX}px`;
+        activeWindow.style.top = `${newY}px`;
+    }
+
+    function mouseUpHandler() {
+        if (activeWindow) {
+            pushLogToTerminal(`SYS_UI: WINDOW [${activeWindow.getAttribute('id').toUpperCase()}] POSITION SECTOR RECALIBRATED.`);
+        }
+        activeWindow = null;
+        document.removeEventListener('mousemove', mouseMoveHandler);
+        document.removeEventListener('mouseup', mouseUpHandler);
+    }
+}
+
+// ❌ INTERCEPTOR DE BOTONES DE CIERRE (Ocultar Ventanas)
+function setupWindowControls() {
+    SYS_DOM.closeButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const windowTarget = e.currentTarget.closest('.floating-window');
+            if (windowTarget) {
+                windowTarget.classList.add('hidden');
+                pushLogToTerminal(`SYS_UI: STREAM CONNECTION TO [${windowTarget.getAttribute('id').toUpperCase()}] TERMINATED.`);
             }
         });
     });
 }
 
-// ==========================================================================
-/* 🖱️ PARTE 6: ALGORITMO DRAG & DROP DE VENTANAS HUD INTERACTIVAS */
-// ==========================================================================
-
-function makeHUDWindowsDraggable() {
-    pushLogToTerminal("HUD_ENG: COUPLING WINDOW KINETIC DRAG LISTENERS...");
-    const dragTargets = document.querySelectorAll('.draggable-hud-window');
-    
-    dragTargets.forEach(windowElement => {
-        const titleBar = windowElement.querySelector('.window-title-bar');
-        if (!titleBar) return;
-
-        let offsetX = 0, offsetY = 0, mouseX = 0, mouseY = 0;
-
-        titleBar.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            
-            document.onmouseup = closeDragElement;
-            document.onmousemove = (event) => {
-                event.preventDefault();
-                offsetX = mouseX - event.clientX;
-                offsetY = mouseY - event.clientY;
-                mouseX = event.clientX;
-                mouseY = event.clientY;
-                
-                windowElement.style.top = (windowElement.offsetTop - offsetY) + "px";
-                windowElement.style.left = (windowElement.offsetLeft - offsetX) + "px";
-            };
+// 🔊 CONTROLADOR DE CONFIGURACIÓN DE AUDIO (CONSOLA DE MEZCLA)
+function setupAudioMatrix() {
+    SYS_DOM.audioSliders.forEach(slider => {
+        slider.addEventListener('input', (e) => {
+            const channel = e.target.id.toUpperCase();
+            const volume = e.target.value;
+            // Registra el cambio en la terminal de logs
+            if (Math.random() > 0.7) { // Evita saturar el log al deslizar rápido
+                pushLogToTerminal(`AUDIO_MIX: CHANNEL [${channel}] VOLUME DEVIATION AT ${volume}%.`);
+            }
         });
-
-        function closeDragElement() {
-            document.onmouseup = null;
-            document.onmousemove = null;
-        }
     });
 }
 
-// ==========================================================================
-/* 🔄 INITIALIZATION EXECUTOR (DOM TRIGGER) */
-// ==========================================================================
+// 🚨 COMPONENTE DE GENERACIÓN DE NOTIFICACIONES DINÁMICAS
+function spawnNotification(message, type = "success") {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `notification ${type}`;
+    alertDiv.textContent = message.toUpperCase();
 
-document.addEventListener("DOMContentLoaded", async () => {
-    setupAuthProtocols();           // Iniciar login y exploits
-    await fetchNexusDatabase();      // Conectar almacenamiento JSON
-    linkSidebarMenuToDatastream();   // Acoplar botones laterales
-    setupNavigationMechanics();     // Conectar flechas de carrusel ◀ ▶
-    makeHUDWindowsDraggable();       // Inyectar físicas de arrastre al HUD flotante
+    SYS_DOM.notificationContainer.appendChild(alertDiv);
     
-    pushLogToTerminal("🚀 CORE_KERNEL: SYSTEM INITIALIZATION SUCCESSFUL. ICE BREAKER STANDBY.");
+    // Enviar rastro al terminal log
+    pushLogToTerminal(`NOTIFY_CORE: STATUS_${type.toUpperCase()} // ${message}`);
+
+    // Auto-destrucción de la notificación flotante tras 4 segundos
+    setTimeout(() => {
+        alertDiv.style.opacity = '0';
+        alertDiv.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => alertDiv.remove(), 500);
+    }, 4000);
+}
+
+// DISPARADOR LOGÍSTICO COMPLETO DEL S.O.
+document.addEventListener("DOMContentLoaded", () => {
+    setupWindowDragAndDrop();
+    setupWindowControls();
+    setupAudioMatrix();
+
+    // Pequeño retardo para lanzar una notificación de bienvenida tras el login
+    setTimeout(() => {
+        if (!document.getElementById('nexus').classList.contains('hidden')) {
+            spawnNotification("Nexus Cyber-Defense Core Active", "success");
+        }
+    }, 2000);
 });
