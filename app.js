@@ -644,3 +644,24 @@ async function initNexus() {
 }
 
 initNexus();
+
+// Función para exportar un objeto de tu DB a un JSON compatible con Foundry
+function exportToFoundry(id) {
+    const item = findEntityById(id); // Tu lógica de búsqueda
+    const foundryItem = {
+        name: item.name,
+        type: "weapon", // o "cyberware"
+        system: {
+            description: { value: item.description },
+            damage: { parts: [[item.stats.Damage || "2d6", "physical"]] },
+            quantity: 1,
+            weight: 1
+        },
+        img: item.image,
+        flags: { "nexus-database": { originalId: item.id } }
+    };
+    
+    // Crear descarga de archivo .json para importar a Foundry
+    const blob = new Blob([JSON.stringify(foundryItem)], {type: "application/json"});
+    // ... lógica de trigger de descarga
+}
