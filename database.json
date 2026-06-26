@@ -4,8 +4,8 @@
       "id": "militech-arms-ajax",
       "name": "Militech Arms Vanguard",
       "serial": "AR-MIL-RED-2045",
-      "tag": "ASSAULT RIFLE // EXOTIC SLOTS AVAILABLE",
-      "description": "Fusil de asalto estándar de la era del Rojo. Dispara munición pesada de 5.56mm. Fiable en cualquier clima, con suficiente potencia para perforar blindajes corporativos corporales ligeros (SP 11).",
+      "tag": "ASSAULT RIFLE // MILITARY GRADE",
+      "description": "Fusil de asalto estándar de la era del Rojo. Dispara munición pesada de 5.56mm. Fiable en cualquier entorno urbano, con suficiente potencia para perforar blindajes corporales ligeros (SP 11). El pilar del arsenal corporativo.",
       "image": "https://images.unsplash.com/photo-1595590424283-b8f17842773f?q=80&w=400",
       "stats": {
         "Daño (5d6)": "85",
@@ -13,14 +13,20 @@
         "Capacidad (30)": "75",
         "Confiabilidad": "90"
       },
-      "mods": ["Mira Inteligente de Enlace", "Cargador de Tambor Ampliado", "Silenciador de Carbono"]
+      "mods": ["Mira Inteligente de Enlace", "Cargador de Tambor Ampliado", "Silenciador de Carbono"],
+      "intel_status": "DECRYPTED_VALID",
+      "intel_class": "MIL_SPEC_LEVEL_3",
+      "meta_depth": "4 NODOS INTERNES",
+      "meta_overflow": "0.01% ATK_VULN",
+      "meta_load": "280 MHz // SYNC",
+      "meta_countermeasures": "READY // BYPASS.EXE"
     },
     {
       "id": "malorian-arms-3516",
       "name": "Malorian Arms 3516",
       "serial": "PISTOL-MAL-SILVER-01",
       "tag": "EXOTIC HEAVY PISTOL // LEGENDARY GRADE",
-      "description": "La legendaria pistola personalizada de Johnny Silverhand. Un cañón de mano absoluto que requiere especificaciones físicas o implantes cibernéticos para mitigar el retroceso destructivo.",
+      "description": "La legendaria pistola personalizada de Johnny Silverhand. Un cañón de mano absoluto que requiere especificaciones físicas o implantes cibernéticos para mitigar el retroceso destructivo. El fuego cibernético definitivo.",
       "image": "https://images.unsplash.com/photo-1584281722557-013ba0bd2e6d?q=80&w=400",
       "stats": {
         "Daño (4d6)": "95",
@@ -28,7 +34,13 @@
         "Capacidad (8)": "30",
         "Ocultable (No)": "10"
       },
-      "mods": ["Smartgun Link Integrado", "Láser de Munición Inteligente"]
+      "mods": ["Smartgun Link Integrado", "Láser de Munición Inteligente"],
+      "intel_status": "DECRYPTED_VALID",
+      "intel_class": "RESTRICTED_CLASS_A",
+      "meta_depth": "6 NODOS INTERNES",
+      "meta_overflow": "0.05% ATK_VULN",
+      "meta_load": "410 MHz // OVER",
+      "meta_countermeasures": "WARNING // TRACE"
     },
     {
       "id": "tsunami-arms-helix",
@@ -43,7 +55,13 @@
         "Capacidad (16)": "55",
         "Precisión Smart": "95"
       },
-      "mods": ["Chip de Enlace de Proximidad", "[ SLOT_EMPTY ]"]
+      "mods": ["Chip de Enlace de Proximidad", "[ SLOT_EMPTY ]"],
+      "intel_status": "DECRYPTED_VALID",
+      "intel_class": "CORP_USE_ONLY",
+      "meta_depth": "3 NODOS INTERNES",
+      "meta_overflow": "0.02% ATK_VULN",
+      "meta_load": "310 MHz // SYNC",
+      "meta_countermeasures": "READY // BYPASS.EXE"
     }
   ],
   "cyberware": [
@@ -53,13 +71,20 @@
       "serial": "CYBER-NEURAL-001",
       "tag": "NEURALWARE // FOUNDATION IMPLANT",
       "description": "El cimiento obligatorio para cualquier interfaz avanzada. Coprocesador espinal que permite la instalación de chips de habilidades, Sandevistan, Kerenzikov y la conexión directa a Cyberdecks.",
+      "image": "",
       "stats": {
         "Costo Humanidad": "20",
         "Ranuras Chip": "85",
         "Sincronía Cores": "90",
         "Pérdida HL (2d6)": "35"
       },
-      "mods": ["Enlace de Interfaz Neural", "Ranura de Chip de Tácticas"]
+      "mods": ["Enlace de Interfaz Neural", "Ranura de Chip de Tácticas"],
+      "intel_status": "BIOMETRIC_OK",
+      "intel_class": "MEDICAL_GRADE_2",
+      "meta_depth": "2 NODOS INTERNES",
+      "meta_overflow": "0.00% ATK_VULN",
+      "meta_load": "520 MHz // INTEL",
+      "meta_countermeasures": "SECURE // KERNEL"
     },
     {
       "id": "kerenzikov-mkv",
@@ -67,27 +92,20 @@
       "serial": "CYBER-SPEED-REF-09",
       "tag": "NEURALWARE // REFLEX COPROCESSOR",
       "description": "Sistema de reflejos cableado de manera permanente. A diferencia del Sandevistan, el Kerenzikov mantiene al operador en un estado constante de percepción acelerada al esquivar fuego hostil.",
+      "image": "",
       "stats": {
         "Reflejos +2": "95",
         "Costo Humanidad": "40",
         "Pérdida HL (4d6)": "70",
         "Latencia Cores": "05"
       },
-      "mods": ["Optimizador del Sistema Motor"]
-    },
-    {
-      "id": "cybereye-mk4",
-      "name": "Kiroshi Cybereye Mk.IV",
-      "serial": "CYBER-OPTIC-KIR-44",
-      "tag": "CYBEROPTICS // SENSORY UPGRADE",
-      "description": "Reemplazo ocular quirúrgico estándar de oro. Cuenta con tres ranuras modulares independientes para inyectar filtros térmicos, contadores de munición e interceptores ópticos de puntería.",
-      "stats": {
-        "Ranuras Mod": "75",
-        "Claridad HUD": "95",
-        "Costo Humanidad": "20",
-        "Pérdida HL (2d6)": "30"
-      },
-      "mods": ["Filtro Anti-Deslumbramiento", "Analizador de Trayectoria", "Targeting Scope"]
+      "mods": ["Optimizador del Sistema Motor"],
+      "intel_status": "VERIFIED_CYBER",
+      "intel_class": "TACTICAL_LEVEL_4",
+      "meta_depth": "5 NODOS INTERNES",
+      "meta_overflow": "0.04% ATK_VULN",
+      "meta_load": "450 MHz // SHIFT",
+      "meta_countermeasures": "READY // BYPASS.EXE"
     }
   ],
   "software": [
@@ -97,27 +115,20 @@
       "serial": "SW-NET-ATK-SWORD",
       "tag": "ATTACK PROGRAM // NETRUNNER ARSENAL",
       "description": "Programa de asalto clásico para la red. Diseñado para atacar los CPU de Netrunners enemigos o perforar el software defensivo provocando daños masivos en el buffer de datos del oponente.",
+      "image": "",
       "stats": {
         "ATK Rez (1d6)": "75",
         "Uso de Memoria": "20",
         "Clase Ataque": "80",
         "Velocidad Ejec": "85"
       },
-      "mods": ["Trigger de Impacto Crítico", "Compresor de Código"]
-    },
-    {
-      "id": "program-armor",
-      "name": "Armor.vanguard",
-      "serial": "SW-NET-DEF-ARMOR",
-      "tag": "DEFENSE PROGRAM // SHIELD MODULE",
-      "description": "Reduce todo el daño infligido al cerebro del Netrunner o a su Cyberdeck en 4 puntos por cada ataque recibido. Permanece activo hasta que es destruido por un ICE enemigo.",
-      "stats": {
-        "DEF Buffer": "90",
-        "Mitigación SP": "80",
-        "Uso de Memoria": "40",
-        "Persistencia": "100"
-      },
-      "mods": ["Parche Rápido de Kernel", "[ SLOT_EMPTY ]"]
+      "mods": ["Trigger de Impacto Crítico", "Compresor de Código"],
+      "intel_status": "COMPILED_OK",
+      "intel_class": "UTILITY_NET",
+      "meta_depth": "1 NODO NET",
+      "meta_overflow": "0.00% ATK_VULN",
+      "meta_load": "120 MHz // EXEC",
+      "meta_countermeasures": "INJECTED // ACTIVE"
     }
   ],
   "restricted": [
@@ -126,44 +137,44 @@
       "name": "Black ICE: Hellhound",
       "serial": "ICE-KILLER-HELL-666",
       "tag": "CLASSIFIED // ANTI-PERSONNEL BLACK ICE",
-      "description": "ALERTA PROGRAMA ASESINO. Si este ICE detecta un Netrunner intruso en la red local, lo rastrea implacablemente. No solo destruye los programas activos, sino que inflige daño cerebral directo quemando las terminales neuronales (D6 daño físico real).",
+      "description": "ALERTA PROGRAMA ASESINO. Si este ICE detecta un Netrunner intruso en la red local, lo rastrea implacablemente. Destruye los programas activos e inflige daño cerebral directo quemando las terminales neuronales (D6 daño físico real).",
+      "image": "",
       "stats": {
         "ATK Kern (1d6)": "95",
         "Velocidad ICE": "90",
         "Defensa Rez (30)": "85",
         "Letalidad Real": "100"
       },
-      "mods": ["Rastreador de IP Geográfico", "Inyector de Voltaje Bioeléctrico"]
-    },
-    {
-      "id": "ice-kraken",
-      "name": "Black ICE: Kraken",
-      "serial": "ICE-GATE-KRAK-999",
-      "tag": "CLASSIFIED // ARCHITECTURE DESTROYER",
-      "description": "Una monstruosidad de código militar empleada para bloquear de forma permanente los nodos de datos maestros de las corporaciones. Atrapa los Cyberdecks en un bucle infinito que deforma el firmware.",
-      "stats": {
-        "ATK Kern (2d6)": "100",
-        "Velocidad ICE": "75",
-        "Defensa Rez (50)": "95",
-        "Letalidad Real": "90"
-      },
-      "mods": ["Encadenador de Buffers", "Bucle Crítico de Retroalimentación"]
+      "mods": ["Rastreador de IP Geográfico", "Inyector de Voltaje Bioeléctrico"],
+      "intel_status": "CRITICAL_THREAT",
+      "intel_class": "BLACK_ICE_LEVEL_5",
+      "meta_depth": "8 NODOS INTERNAL",
+      "meta_overflow": "89.4% OVERFLOW",
+      "meta_load": "980 MHz // EXTREME",
+      "meta_countermeasures": "WARNING // TRAP.LOG"
     }
   ],
   "biotech": [
     {
       "id": "nanite-injector",
-      "name": "Biodyne Nanite Trauma-Kit",
+      "name": "Biodyne Trauma-Kit",
       "serial": "BIO-TECH-NANITE-X",
       "tag": "BIOTECH // MEDICAL GRADE IMPLANT",
       "description": "Inyección de nanobots médicos programados en el torrente sanguíneo. Se activan de forma automática ante un trauma crítico estabilizando los signos vitales del operador y deteniendo hemorragias internas de inmediato.",
+      "image": "",
       "stats": {
         "Estabilización": "98",
         "Costo Humanidad": "30",
         "Filtrado Toxinas": "80",
         "Pérdida HL (3d6)": "50"
       },
-      "mods": ["Inyector de Coagulante Sintético"]
+      "mods": ["Inyector de Coagulante Sintético"],
+      "intel_status": "DECRYPTED_VALID",
+      "intel_class": "MEDICAL_GRADE_3",
+      "meta_depth": "2 NODOS INTERNES",
+      "meta_overflow": "0.01% ATK_VULN",
+      "meta_load": "210 MHz // SYNC",
+      "meta_countermeasures": "READY // BYPASS.EXE"
     }
   ],
   "vehicles": [
@@ -173,13 +184,20 @@
       "serial": "VEH-AV4-MILITARY",
       "tag": "URBAN ASSAULT AERODYNE // HEAVY ARMOR",
       "description": "Vehículo de despegue vertical blindado, el estándar definitivo para equipos de trauma de élite y fuerzas de asalto corporativas. Equipado con blindaje compuesto y motores de propulsión a chorro vectorizados.",
+      "image": "",
       "stats": {
         "Velocidad AV": "95",
         "Blindaje SP 15": "90",
         "Manejo Giro": "70",
         "Capacidad Carga": "85"
       },
-      "mods": ["Chasis Reforzado", "Torreta Smart Integrada", "Sistema de Radar Avanzado"]
+      "mods": ["Chasis Reforzado", "Torreta Smart Integrada", "Sistema de Radar Avanzado"],
+      "intel_status": "DECRYPTED_VALID",
+      "intel_class": "MIL_SPEC_LEVEL_3",
+      "meta_depth": "4 NODOS INTERNES",
+      "meta_overflow": "0.02% ATK_VULN",
+      "meta_load": "340 MHz // SYNC",
+      "meta_countermeasures": "READY // BYPASS.EXE"
     }
   ],
   "corporations": [
@@ -189,41 +207,43 @@
       "serial": "CORP-ARA-JAPAN",
       "tag": "MEGACORPORATION // MILITARY CONTRACTOR",
       "description": "Especialistas en la fabricación de armamento pesado, ciberware de élite y ejércitos privados de defensa corporativa. Dominan las sombras de Night City protegiendo los secretos de las mayores sub-redes del planeta.",
+      "image": "",
       "stats": {
         "Fuerza Militar": "99",
         "Presencia en Red": "95",
         "Capital de Guerra": "98",
         "Seguridad Nodos": "97"
       },
-      "mods": ["Sub-Redes de Almacenamiento Soulkiller", "Fuerza Netrunner Elite"]
+      "mods": ["Sub-Redes de Almacenamiento Soulkiller", "Fuerza Netrunner Elite"],
+      "intel_status": "ENCRYPTED_DEEP",
+      "intel_class": "GLOBAL_MEGA_CORP",
+      "meta_depth": "7 NODOS INTERNES",
+      "meta_overflow": "0.02% ATK_VULN",
+      "meta_load": "320 MHz // SYNC_OK",
+      "meta_countermeasures": "READY // BYPASS.EXE"
     }
   ],
   "districts": [
     {
       "id": "combat-zone",
-      "name": "La Zona de Combate (Night City)",
+      "name": "La Zona de Combate",
       "serial": "GEO-NC-CZONE",
       "tag": "TERRITORY // LAWLESS ANARCHY",
       "description": "El sector de la ciudad abandonado por completo por la policía (NCPD) y controlado por pandillas fuertemente modificadas como los Maelstrom o los Bozo. La supervivencia aquí exige blindaje corporal y reflejos al límite.",
+      "image": "",
       "stats": {
         "Índice Peligro": "100",
-        "Presencia Pandillas": "95",
-        "Sub-Redes Abiertas": "40",
+        "Presencia Gangs": "95",
+        "Sub-Redes Open": "40",
         "Infraestructura": "10"
       },
-      "mods": ["Mercados Negros de Cyberware", "Servidores Refugiados Deep Web"]
+      "mods": ["Mercados Negros de Cyberware", "Servidores Refugiados Deep Web"],
+      "intel_status": "UNSECURE_ZONE",
+      "intel_class": "HIGH_CRIME_INDEX",
+      "meta_depth": "9 NODOS DISTRIB",
+      "meta_overflow": "45.2% RISK_VULN",
+      "meta_load": "640 MHz // UNSTABLE",
+      "meta_countermeasures": "NONE // DANGER_NODE"
     }
   ]
 }
-
-"gear": [
-    {
-      "id": "agent-comms",
-      "name": "Biodyne Agent V9",
-      "serial": "GEAR-BIO-AGENT",
-      "tag": "COMMUNICATIONS // PERSONAL COMPUTER",
-      "description": "El smartphone/computadora de bolsillo estándar del Tiempo del Rojo. Administra llamadas, escaneo de datos locales y proyecciones holográficas básicas de mapas tácticos.",
-      "stats": { "Procesamiento": "80", "Batería": "95", "Señal Satelital": "75", "Cifrado Link": "60" },
-      "mods": ["Chip de Enlace Encriptado", "Batería de Celda Solar"]
-    }
-  ]
