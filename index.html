@@ -3,150 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEON HEAVEN // NEXUS DATABASE</title>
+    <title>NEON HEAVEN // NEXUS DATABASE SYSTEM</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <!-- ==========================================================================
-         PANTALLA DE ACCESO / LOGIN (NETRUNNER INTERFACE OVERLAY)
+         SISTEMA DE ACCESO Y AUTENTICACIÓN (LOGIN OVERLAY PRINCIPAL)
          ========================================================================== -->
     <div id="login-screen" class="login-overlay">
         <div class="login-box">
             <div class="terminal-header">
-                <span class="blink">●</span> ICE_BREAKER_PROTOCOL // INITIALIZING...
+                <span class="blink">●</span> ICE_BREAKER_PROTOCOL // INITIALIZING LINK...
             </div>
             <div class="login-content">
-                <p class="crypto-text">SUB-NET: NIGHT_CITY_NET_NODE_04</p>
-                <p class="crypto-text">ALERT: UNAUTHORIZED ACCESS DETECTED BY WATCHDOG ICE</p>
-                
-                <div class="input-group">
-                    <label for="netrunner-id">> NETRUNNER_ID:</label>
-                    <input type="text" id="netrunner-id" placeholder="Cachirula_99" autocomplete="off">
+                <div class="alert-banner">
+                    <p class="crypto-text">SUB-NET: NIGHT_CITY_NET_NODE_04</p>
+                    <p class="crypto-text-alert">WARNING: SYSTEM PROTECTED BY MILITECH WATCHDOG BLACK ICE</p>
                 </div>
                 
-                <div class="input-group">
-                    <label for="access-key">> ACCESS_DECRYPT_KEY:</label>
-                    <input type="password" id="access-key" placeholder="••••••••" autocomplete="off">
+                <div class="terminal-decorations">
+                    <span class="decor-line">[ SECURITY_LEVEL: MAXIMUM ]</span>
+                    <span class="decor-line">[ ENCRYPTION: RSA_4096_CYBER ]</span>
+                </div>
+
+                <div class="input-container-group">
+                    <div class="input-group">
+                        <label for="netrunner-id">> NETRUNNER_ID:</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="netrunner-id" placeholder="Cachirula_99" autocomplete="off">
+                            <span class="input-cursor">_</span>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="access-key">> ACCESS_DECRYPT_KEY:</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="access-key" placeholder="••••••••" autocomplete="off">
+                            <span class="input-cursor">_</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="login-actions">
-                    <button id="btn-bypass" class="btn-terminal">RUN_BYPASS_EXPLOIT</button>
-                    <button id="btn-login" class="btn-terminal primary">INITIATE_DIRECT_LINK</button>
+                    <button id="btn-bypass" class="btn-terminal exploit-btn">
+                        <span class="btn-glitch">RUN_BYPASS_EXPLOIT</span>
+                    </button>
+                    <button id="btn-login" class="btn-terminal primary secure-btn">
+                        <span class="btn-glitch">INITIATE_DIRECT_LINK</span>
+                    </button>
                 </div>
             </div>
-            <div id="login-status-msg" class="login-status">> SYSTEM: STANDBY. WAITING FOR CREDENTIALS...</div>
+            <div id="login-status-msg" class="login-status">> SYSTEM: STANDBY. ENTER NEURAL LINK CREDENTIALS...</div>
+            <div class="login-footer">
+                <span>LOCAL_PORT: 5543 // BYPASS_STATUS: UNLINKED</span>
+            </div>
         </div>
     </div>
 
     <!-- ==========================================================================
-         INTERFAZ PRINCIPAL DE LA TERMINAL DE DATOS
+         INTERFAZ OPERATIVA DE LA TERMINAL (UNIFIED NEON LAYOUT)
          ========================================================================== -->
-    <div class="terminal-container unified-layout">
+    <div class="terminal-container unified-layout hidden-until-auth">
         
-        <!-- SIDEBAR ORIGINAL COMPLETAMENTE INTACTO -->
+        <!-- ==========================================================================
+             SIDEBAR DE NAVEGACIÓN // MENU LATERAL DE RECURSOS DE LA RED
+             ========================================================================== -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="status-indicator online"></div>
-                <h1>NEXUS_DB // v1.0</h1>
+                <div class="brand-block">
+                    <h1>NEXUS_DB // v1.0</h1>
+                    <span class="sub-brand">CYBERPUNK RED COMPENDIUM</span>
+                </div>
+            </div>
+            
+            <div class="user-profile-badge">
+                <div class="avatar-stub">⚡</div>
+                <div class="badge-info">
+                    <span class="badge-title">OPERATOR ACTIVE</span>
+                    <span id="operator-display" class="badge-name">CACHIRULA</span>
+                </div>
             </div>
             
             <nav class="database-menu">
                 <button class="menu-item active" data-category="arms">
-                    <span class="menu-icon">⚡</span> ARMS
+                    <span class="menu-icon">⚡</span>
+                    <div class="menu-text-group">
+                        <span class="menu-title">ARMS</span>
+                        <span class="menu-desc">Arsenal & Ordnance</span>
+                    </div>
                 </button>
                 <button class="menu-item" data-category="cyberware">
-                    <span class="menu-icon">👁️</span> CYBERWARE
+                    <span class="menu-icon">👁️</span>
+                    <div class="menu-text-group">
+                        <span class="menu-title">CYBERWARE</span>
+                        <span class="menu-desc">Neural & Neuralware Implants</span>
+                    </div>
                 </button>
                 <button class="menu-item" data-category="software">
-                    <span class="menu-icon">💾</span> SOFTWARE
+                    <span class="menu-icon">💾</span>
+                    <div class="menu-text-group">
+                        <span class="menu-title">SOFTWARE</span>
+                        <span class="menu-desc">Netrunner Utilities</span>
+                    </div>
                 </button>
                 <button class="menu-item" data-category="restricted">
-                    <span class="menu-icon">💀</span> RESTRICTED
+                    <span class="menu-icon">💀</span>
+                    <div class="menu-text-group">
+                        <span class="menu-title">RESTRICTED</span>
+                        <span class="menu-desc">Black ICE Threat-Level</span>
+                    </div>
                 </button>
                 <button class="menu-item" data-category="biotech">
-                    <span class="menu-icon">🧪</span> BIOTECH
+                    <span class="menu-icon">🧪</span>
+                    <div class="menu-text-group">
+                        <span class="menu-title">BIOTECH</span>
+                        <span class="menu-desc">Nanotech & Biotech Cores</span>
+                    </div>
                 </button>
                 <button class="menu-item" data-category="vehicles">
-                    <span class="menu-icon">🛸</span> VEHICLES
+                    <span class="menu-icon">🛸</span>
+                    <div class="menu-text-group">
+                        <span class="menu-title">VEHICLES</span>
+                        <span class="menu-desc">Aerodynes & Combat Armor</span>
+                    </div>
                 </button>
                 <button class="menu-item" data-category="corporations">
-                    <span class="menu-icon">🏢</span> CORPORATIONS
+                    <span class="menu-icon">🏢</span>
+                    <div class="menu-text-group">
+                        <span class="menu-title">CORPORATIONS</span>
+                        <span class="menu-desc">Global Mega-Corps Intel</span>
+                    </div>
                 </button>
                 <button class="menu-item" data-category="districts">
-                    <span class="menu-icon">📍</span> DISTRICTS
+                    <span class="menu-icon">📍</span>
+                    <div class="menu-text-group">
+                        <span class="menu-title">DISTRICTS</span>
+                        <span class="menu-desc">Night City Mapping Data</span>
+                    </div>
                 </button>
             </nav>
 
-            <!-- MONITOR DE LOGS EN TIEMPO REAL -->
+            <!-- CONSOLA DE LOGS DEL SISTEMA (LOG STREAM PRINCIPAL) -->
             <div class="terminal-logs-panel">
-                <div class="logs-header">TERMINAL_LOGS // HOST: LOCAL</div>
+                <div class="logs-header">
+                    <span>TERMINAL_LOGS // HOST: LOCAL_SUBNET</span>
+                    <span class="logs-refresh-indicator">AUTO_SYNC</span>
+                </div>
                 <div id="terminal-log-stream" class="logs-stream">
-                    <p class="log-line">> CORE_SYS: INITIALIZING LINK...</p>
+                    <p class="log-line systems-check">> KERNEL: BOOT SEQUENCE COMPILED...</p>
+                    <p class="log-line">> CORE_SYS: INITIALIZING SECURE LINK BUFFER...</p>
                 </div>
             </div>
         </aside>
 
-        <!-- VIEWPORT PRINCIPAL CON BARRA SUPERIOR DE ACCESO Y PAGINACIÓN -->
+        <!-- ==========================================================================
+             VIEWPORT CENTRAL // VISOR MAESTRO DE ARCHIVOS DE INTELIGENCIA
+             ========================================================================== -->
         <main class="viewport" id="content-window">
             
-            <!-- VIEWPORT HEADER ORIGINAL + NUEVA PAGINACIÓN INTEGRADA -->
+            <!-- ENTRADA DE DATOS SUPERIOR (CABECERA DE ENTIDADES CON PAGINACIÓN) -->
             <div id="viewport-header" class="entity-header">
                 <div class="entity-title-block">
                     <span id="ent-tag" class="entity-tag">TACTICAL RIFLE // MILITARY GRADE</span>
                     <h2 id="ent-name">STREAMING ARMS CORE...</h2>
                 </div>
                 
-                <!-- CONTROLES TÁCTICOS ◀ COMPATIBLES CON TU ACCESO DE RED ▶ -->
-                <div class="interface-controls-wrapper" style="display: flex; align-items: center; gap: 15px;">
-                    <div class="tactical-pagination" style="display: flex; gap: 5px; font-family: monospace;">
-                        <button id="nav-prev-entity" style="background: rgba(157, 20, 58, 0.2); border: 1px solid #9d143a; color: #ffffff; cursor: pointer; padding: 4px 10px; font-weight: bold;">◀</button>
-                        <span id="nav-entity-counter" style="color: #ff2a5f; padding: 4px 5px; font-size: 0.85rem; min-width: 35px; text-align: center;">1/1</span>
-                        <button id="nav-next-entity" style="background: rgba(157, 20, 58, 0.2); border: 1px solid #9d143a; color: #ffffff; cursor: pointer; padding: 4px 10px; font-weight: bold;">▶</button>
+                <!-- CONTROLES TÁCTICOS RECONSTRUIDOS DE PAGINACIÓN INTERACTIVA -->
+                <div class="interface-controls-wrapper" style="display: flex; align-items: center; gap: 20px;">
+                    <div class="tactical-pagination-module" style="display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.5); padding: 4px 8px; border: 1px solid rgba(255, 42, 95, 0.2); border-radius: 2px;">
+                        <button id="nav-prev-entity" class="pag-btn" style="background: rgba(157, 20, 58, 0.2); border: 1px solid #9d143a; color: #ffffff; cursor: pointer; padding: 3px 12px; font-weight: bold; font-family: monospace; transition: all 0.2s;">◀</button>
+                        <span id="nav-entity-counter" class="pag-counter" style="color: #ff2a5f; font-family: monospace; font-size: 0.85rem; min-width: 45px; text-align: center; font-weight: bold; letter-spacing: 1px;">1 / 1</span>
+                        <button id="nav-next-entity" class="pag-btn" style="background: rgba(157, 20, 58, 0.2); border: 1px solid #9d143a; color: #ffffff; cursor: pointer; padding: 3px 12px; font-weight: bold; font-family: monospace; transition: all 0.2s;">▶</button>
                     </div>
-                    <span id="ent-serial" class="entity-serial">AR-MIL-8892-X</span>
+                    <div class="serial-block-wrapper" style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <span class="serial-label" style="font-size: 0.65rem; color: rgba(255,255,255,0.4); font-family: monospace;">NODE_INDEX_SERIAL</span>
+                        <span id="ent-serial" class="entity-serial">AR-MIL-8892-X</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- CUERPO DE DESPLIEGUE ORIGINAL (HOLOGRAMA + ESTADÍSTICAS) -->
+            <!-- CUERPO PRINCIPAL DEL VISOR DE ARCHIVOS DE NIGHT CITY -->
             <div class="viewport-body">
                 
-                <!-- PANEL VISUAL IZQUIERDO -->
+                <!-- SUB-SECCIÓN: VISUALIZACIÓN GRÁFICA / HOLOGRAMA IZQUIERDO -->
                 <div class="visual-panel">
-                    <div class="hologram-frame">
-                        <img id="entity-image" src="" alt="Hologram View" class="hidden">
-                        <div class="scan-line"></div>
+                    <div class="hologram-viewport-container">
+                        <div class="hologram-corner-brackets top-left"></div>
+                        <div class="hologram-corner-brackets top-right"></div>
+                        <div class="hologram-corner-brackets bottom-left"></div>
+                        <div class="hologram-corner-brackets bottom-right"></div>
+                        
+                        <div class="hologram-frame">
+                            <img id="entity-image" src="" alt="Hologram Grid View" class="hidden">
+                            <div class="scan-line"></div>
+                            <div class="grid-overlay-mesh"></div>
+                        </div>
                     </div>
-                    <p id="ent-desc" class="entity-description">
-                        Cargando registros balísticos y técnicos desde el servidor central de la subred...
-                    </p>
+                    
+                    <div class="data-block-desc-container">
+                        <div class="desc-header">📂 ARCHIVE_INTELLIGENCE_SUMMARY //</div>
+                        <p id="ent-desc" class="entity-description">
+                            Cargando registros balísticos y técnicos desde el servidor central de la subred... El retraso en la sincronización puede ser provocado por firewalls remotos de Arasaka o MiliTech.
+                        </p>
+                    </div>
                 </div>
 
-                <!-- PANEL DE ESTADÍSTICAS DERECHO -->
+                <!-- SUB-SECCIÓN: TABLAS DE ESTADÍSTICAS Y SLOT DE COMPONENTES DERECHO -->
                 <div class="stats-panel">
                     
-                    <div class="stats-section">
-                        <h3>DATOS DE RENDIMIENTO // REGLAMENTO ROJO</h3>
+                    <!-- MATRIZ DE RENDIMIENTO DINÁMICA -->
+                    <div class="stats-section core-performance-matrix">
+                        <div class="section-title-wrapper">
+                            <span class="decor-dot"></span>
+                            <h3>DATOS DE RENDIMIENTO // REGLAMENTO ROJO</h3>
+                        </div>
                         <div id="attribute-bars" class="attribute-bars-container">
-                            <!-- Inyección dinámica de barras -->
+                            <!-- Inyección dinámica de barras de progreso (Daño, ROF, Humanidad, etc.) -->
                         </div>
                     </div>
 
-                    <div class="mods-section">
-                        <h3>RANURAS DE EXPANSIÓN // COMPONENTES</h3>
+                    <!-- RECEPTÁCULO DE UPGRADES / RANURAS MÓDULO -->
+                    <div class="mods-section expansion-slots-matrix">
+                        <div class="section-title-wrapper">
+                            <span class="decor-dot"></span>
+                            <h3>RANURAS DE EXPANSIÓN // HARDWARE MODS</h3>
+                        </div>
                         <div class="mods-grid">
-                            <!-- Inyección dinámica de ranuras -->
+                            <!-- Inyección dinámica de ranuras activas o [ SLOT_EMPTY ] -->
+                        </div>
+                    </div>
+
+                    <!-- CONTENEDOR ESPECÍFICO DE INTELIGENCIA DE TERRENO (RECONSTRUIDO) -->
+                    <div class="tactical-intel-footer-block">
+                        <div class="intel-header-sub">🗺️ SUBNET_LOCATION_INDEX // DATA_FIELD</div>
+                        <div class="intel-table-grid">
+                            <div class="intel-row">
+                                <span class="intel-label">ARCHIVE_STATUS:</span>
+                                <span id="intel-status-val" class="intel-value verified">DECRYPTED_VALID</span>
+                            </div>
+                            <div class="intel-row">
+                                <span class="intel-label">RESTRICTION_CLASS:</span>
+                                <span id="intel-class-val" class="intel-value restricted-alert">MIL_SPEC_LEVEL_3</span>
+                            </div>
                         </div>
                     </div>
 
                 </div>
 
             </div>
+
+            <!-- ==========================================================================
+                 SECCIÓN INFERIOR COMPLETA // BITÁCORA TÉCNICA Y MONITORES DE SISTEMA
+                 ========================================================================== -->
+            <div class="viewport-footer-metadata-panel">
+                <div class="footer-meta-tab">
+                    <span class="tab-indicator active"></span>
+                    <h4>SYS_DIAGNOSTICS // EXTRA_DATA_FEED</h4>
+                </div>
+                <div class="footer-meta-content-grid">
+                    <div class="meta-card">
+                        <span class="meta-card-title">NET_ARCHITECTURE_DEPTH</span>
+                        <p class="meta-card-value" id="meta-architecture-depth">7 NODOS INTERNOS</p>
+                    </div>
+                    <div class="meta-card">
+                        <span class="meta-card-title">BUFFER_OVERFLOW_RISK</span>
+                        <p class="meta-card-value warning-text" id="meta-overflow-risk">0.02% ATK_VULN</p>
+                    </div>
+                    <div class="meta-card">
+                        <span class="meta-card-title">DECK_INTERFACE_LOAD</span>
+                        <p class="meta-card-value" id="meta-deck-load">320 MHz // SYNC_OK</p>
+                    </div>
+                    <div class="meta-card">
+                        <span class="meta-card-title">BLACK_ICE_COUNTERMEASURE</span>
+                        <p class="meta-card-value secure-text" id="meta-countermeasures">READY // BYPASS.EXE</p>
+                    </div>
+                </div>
+                <div class="footer-system-ticker">
+                    <div class="ticker-wrapper">
+                        <span class="ticker-item">SYSTEM_NOTICE: Maelstrom cyber-activity spikes detected in Watson District...</span>
+                        <span class="ticker-item">DATA_ALERT: Trauma Team AV-4 responses delayed in Combat Zone sector 03...</span>
+                        <span class="ticker-item">NETWORK_SYNC: Netwatch actively refreshing regional ICE infrastructure...</span>
+                    </div>
+                </div>
+            </div>
+
         </main>
 
     </div>
 
-    <!-- Enlace al motor del sistema -->
+    <!-- CONTROLADORES CINÉTICOS DE BACKGROUND (ANIMACIÓN DE MATRIZ DE FONDO) -->
+    <div class="background-matrix-rain-effect"></div>
+
+    <!-- Enlace al archivo de lógica unificada del sistema con soporte para carrusel -->
     <script src="app.js"></script>
 </body>
 </html>
