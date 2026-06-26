@@ -4,113 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEON HEAVEN // NEXUS DATABASE</title>
-    <!-- Enlace a los estilos globales de la terminal -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- CONTENEDOR PRINCIPAL DE LA TERMINAL -->
-    <div class="terminal-container">
+    <!-- ==========================================================================
+         PANTALLA DE ACCESO / LOGIN (NETRUNNER INTERFACE OVERLAY)
+         ========================================================================== -->
+    <div id="login-screen" class="login-overlay">
+        <div class="login-box">
+            <div class="terminal-header">
+                <span class="blink">●</span> ICE_BREAKER_PROTOCOL // INITIALIZING...
+            </div>
+            <div class="login-content">
+                <p class="crypto-text">SUB-NET: NIGHT_CITY_NET_NODE_04</p>
+                <p class="crypto-text">ALERT: UNAUTHORIZED ACCESS DETECTED BY WATCHDOG ICE</p>
+                
+                <div class="input-group">
+                    <label for="netrunner-id">> NETRUNNER_ID:</label>
+                    <input type="text" id="netrunner-id" placeholder="Cachirula_99" autocomplete="off">
+                </div>
+                
+                <div class="input-group">
+                    <label for="access-key">> ACCESS_DECRYPT_KEY:</label>
+                    <input type="password" id="access-key" placeholder="••••••••" autocomplete="off">
+                </div>
+
+                <div class="login-actions">
+                    <button id="btn-bypass" class="btn-terminal">RUN_BYPASS_EXPLOIT</button>
+                    <button id="btn-login" class="btn-terminal primary">INITIATE_DIRECT_LINK</button>
+                </div>
+            </div>
+            <div id="login-status-msg" class="login-status">> SYSTEM: STANDBY. WAITING FOR CREDENTIALS...</div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         INTERFAZ PRINCIPAL DE LA TERMINAL DE DATOS
+         ========================================================================== -->
+    <div class="terminal-container unified-layout">
         
-        <!-- ==========================================================================
-             SIDEBAR // MENÚ DE NAVEGACIÓN DE DATOS (NET RUNNER INTERFACE)
-             ========================================================================== -->
+        <!-- SIDEBAR ORIGINAL COMPLETAMENTE INTACTO -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="status-indicator"></div>
-                <h1>NEXUS_DB // v2.0</h1>
+                <div class="status-indicator online"></div>
+                <h1>NEXUS_DB // v1.0</h1>
             </div>
             
             <nav class="database-menu">
                 <button class="menu-item active" data-category="arms">
-                    <span class="menu-icon">⚡</span> ARSENAL
+                    <span class="menu-icon">⚡</span> ARMS
                 </button>
                 <button class="menu-item" data-category="cyberware">
-                    <span class="menu-icon">👁️</span> CIBERWARE
+                    <span class="menu-icon">👁️</span> CYBERWARE
                 </button>
                 <button class="menu-item" data-category="software">
-                    <span class="menu-icon">💾</span> NETRUNNING
+                    <span class="menu-icon">💾</span> SOFTWARE
                 </button>
                 <button class="menu-item" data-category="restricted">
-                    <span class="menu-icon">💀</span> BLACK ICE
+                    <span class="menu-icon">💀</span> RESTRICTED
                 </button>
                 <button class="menu-item" data-category="biotech">
-                    <span class="menu-icon">🧪</span> BIOTECNOLOGÍA
+                    <span class="menu-icon">🧪</span> BIOTECH
                 </button>
                 <button class="menu-item" data-category="vehicles">
-                    <span class="menu-icon">🛸</span> VEHÍCULOS
+                    <span class="menu-icon">🛸</span> VEHICLES
                 </button>
                 <button class="menu-item" data-category="corporations">
-                    <span class="menu-icon">🏢</span> CORPORACIONES
+                    <span class="menu-icon">🏢</span> CORPORATIONS
                 </button>
                 <button class="menu-item" data-category="districts">
-                    <span class="menu-icon">📍</span> DISTRITOS
+                    <span class="menu-icon">📍</span> DISTRICTS
                 </button>
             </nav>
 
-            <!-- MONITOR DE LOGS INFERIOR EN EL SIDEBAR -->
+            <!-- MONITOR DE LOGS EN TIEMPO REAL -->
             <div class="terminal-logs-panel">
-                <div class="logs-header">TERMINAL_LOGS // HOST: NC_SUBNET</div>
+                <div class="logs-header">TERMINAL_LOGS // HOST: LOCAL</div>
                 <div id="terminal-log-stream" class="logs-stream">
-                    <!-- Los logs automáticos de app.js se inyectan aquí -->
-                    <p class="log-line">> CORE_SYS: LINK ESTABLISHED...</p>
+                    <p class="log-line">> CORE_SYS: INITIALIZING LINK...</p>
                 </div>
             </div>
         </aside>
 
-        <!-- ==========================================================================
-             VIEWPORT CENTRAL // VISOR DINÁMICO DE ARCHIVOS Y HOLOGRAMAS
-             ========================================================================== -->
+        <!-- VIEWPORT PRINCIPAL CON BARRA SUPERIOR DE ACCESO Y PAGINACIÓN -->
         <main class="viewport" id="content-window">
             
-            <!-- CABECERA DE LA ENTIDAD CON PAGINACIÓN TÁCTICA -->
-            <div class="entity-header">
+            <!-- VIEWPORT HEADER ORIGINAL + NUEVA PAGINACIÓN INTEGRADA -->
+            <div id="viewport-header" class="entity-header">
                 <div class="entity-title-block">
-                    <span id="ent-tag" class="entity-tag">LOADING DATASTREAM...</span>
-                    <h2 id="ent-name">CONNECTING TO NET...</h2>
+                    <span id="ent-tag" class="entity-tag">TACTICAL RIFLE // MILITARY GRADE</span>
+                    <h2 id="ent-name">STREAMING ARMS CORE...</h2>
                 </div>
                 
-                <!-- CONTENEDOR DE CONTROL FLUIDO ◀ ▶ -->
-                <div style="display: flex; align-items: center; gap: 15px;">
+                <!-- CONTROLES TÁCTICOS ◀ COMPATIBLES CON TU ACCESO DE RED ▶ -->
+                <div class="interface-controls-wrapper" style="display: flex; align-items: center; gap: 15px;">
                     <div class="tactical-pagination" style="display: flex; gap: 5px; font-family: monospace;">
-                        <button id="nav-prev-entity" style="background: rgba(157, 20, 58, 0.2); border: 1px solid #9d143a; color: #ffffff; cursor: pointer; padding: 4px 12px; font-weight: bold; font-size: 0.9rem; transition: background 0.2s;">◀</button>
-                        <span id="nav-entity-counter" style="color: #ff2a5f; padding: 4px 8px; font-size: 0.85rem; min-width: 45px; text-align: center; font-weight: bold; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 42, 95, 0.2);">1 / 1</span>
-                        <button id="nav-next-entity" style="background: rgba(157, 20, 58, 0.2); border: 1px solid #9d143a; color: #ffffff; cursor: pointer; padding: 4px 12px; font-weight: bold; font-size: 0.9rem; transition: background 0.2s;">▶</button>
+                        <button id="nav-prev-entity" style="background: rgba(157, 20, 58, 0.2); border: 1px solid #9d143a; color: #ffffff; cursor: pointer; padding: 4px 10px; font-weight: bold;">◀</button>
+                        <span id="nav-entity-counter" style="color: #ff2a5f; padding: 4px 5px; font-size: 0.85rem; min-width: 35px; text-align: center;">1/1</span>
+                        <button id="nav-next-entity" style="background: rgba(157, 20, 58, 0.2); border: 1px solid #9d143a; color: #ffffff; cursor: pointer; padding: 4px 10px; font-weight: bold;">▶</button>
                     </div>
-                    <span id="ent-serial" class="entity-serial">SYS-ERR-000</span>
+                    <span id="ent-serial" class="entity-serial">AR-MIL-8892-X</span>
                 </div>
             </div>
 
-            <!-- CUERPO DEL VISOR: HOLOGRAMA Y ESTADÍSTICAS DEL REGLAMENTO -->
+            <!-- CUERPO DE DESPLIEGUE ORIGINAL (HOLOGRAMA + ESTADÍSTICAS) -->
             <div class="viewport-body">
                 
-                <!-- SECCIÓN IZQUIERDA: VISUALIZACIÓN / HOLOGRAMA -->
+                <!-- PANEL VISUAL IZQUIERDO -->
                 <div class="visual-panel">
                     <div class="hologram-frame">
                         <img id="entity-image" src="" alt="Hologram View" class="hidden">
                         <div class="scan-line"></div>
                     </div>
                     <p id="ent-desc" class="entity-description">
-                        Esperando sincronización de datos con el archivo remoto database.json...
+                        Cargando registros balísticos y técnicos desde el servidor central de la subred...
                     </p>
                 </div>
 
-                <!-- SECCIÓN DERECHA: ESTADÍSTICAS Y MODS (CYBERPUNK RED CORES) -->
+                <!-- PANEL DE ESTADÍSTICAS DERECHO -->
                 <div class="stats-panel">
                     
-                    <!-- BARRAS DE PROGRESO DE ATRIBUTOS -->
                     <div class="stats-section">
                         <h3>DATOS DE RENDIMIENTO // REGLAMENTO ROJO</h3>
                         <div id="attribute-bars" class="attribute-bars-container">
-                            <!-- Inyección dinámica desde app.js (Daño, ROF, Humanidad...) -->
+                            <!-- Inyección dinámica de barras -->
                         </div>
                     </div>
 
-                    <!-- RANURAS DE MEJORAS / COMPONENTES -->
                     <div class="mods-section">
                         <h3>RANURAS DE EXPANSIÓN // COMPONENTES</h3>
                         <div class="mods-grid">
-                            <!-- Inyección dinámica de ranuras activas o [ SLOT_EMPTY ] -->
+                            <!-- Inyección dinámica de ranuras -->
                         </div>
                     </div>
 
@@ -121,7 +146,7 @@
 
     </div>
 
-    <!-- Enlace a la lógica del sistema con soporte para carrusel -->
+    <!-- Enlace al motor del sistema -->
     <script src="app.js"></script>
 </body>
 </html>
