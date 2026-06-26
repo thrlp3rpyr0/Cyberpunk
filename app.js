@@ -31,13 +31,13 @@ function initializeSystemClock() {
     setInterval(() => {
         const now = new Date();
         // Formato 24h denso para el reloj principal
-        DOM.clock.textContent = now.toTimeString().split(' ')[0];
+        if (DOM.clock) DOM.clock.textContent = now.toTimeString().split(' ')[0];
 
         // Cálculo de Uptime (Tiempo activo desde que cargó)
         const diffMs = Date.now() - startTime;
         const diffMins = Math.floor(diffMs / 60000);
         const diffSecs = Math.floor((diffMs % 60000) / 1000);
-        DOM.uptime.textContent = `UPTIME: ${String(diffMins).padStart(2, '0')}:${String(diffSecs).padStart(2, '0')}`;
+        if (DOM.uptime) DOM.uptime.textContent = `UPTIME: ${String(diffMins).padStart(2, '0')}:${String(diffSecs).padStart(2, '0')}`;
     }, 1000);
 }
 
@@ -58,11 +58,11 @@ function triggerBootSequence() {
         progress += Math.floor(Math.random() * 5) + 2;
         if (progress > 100) progress = 100;
 
-        DOM.bootProgress.style.width = `${progress}%`;
+        if (DOM.bootProgress) DOM.bootProgress.style.width = `${progress}%`;
 
         // Cambio de fases de texto en el HUD de arranque
         if (currentPhaseIdx < phases.length && progress >= phases[currentPhaseIdx].limit) {
-            DOM.bootText.textContent = phases[currentPhaseIdx].text;
+            if (DOM.bootText) DOM.bootText.textContent = phases[currentPhaseIdx].text;
             currentPhaseIdx++;
         }
 
@@ -70,8 +70,8 @@ function triggerBootSequence() {
             clearInterval(bootInterval);
             setTimeout(() => {
                 // Apagamos pantalla de carga y encendemos Login
-                DOM.bootScreen.classList.add('hidden');
-                DOM.authScreen.classList.remove('hidden');
+                if (DOM.bootScreen) DOM.bootScreen.classList.add('hidden');
+                if (DOM.authScreen) DOM.authScreen.classList.remove('hidden');
                 pushLogToTerminal("SYS_BOOT: INITIALIZATION COMPLETE. STANDING BY FOR BIOMETRIC LINK.");
             }, 600);
         }
@@ -80,14 +80,21 @@ function triggerBootSequence() {
 
 // 🔒 SISTEMA DE AUTENTICACIÓN (LOGIN)
 function setupAuthentication() {
-    DOM.authForm.addEventListener('submit', () => {
+    if (!DOM.authForm) return;
+    DOM.authForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // Evita la recarga de página por defecto en el formulario
         const userValue = DOM.authUserInput.value.trim();
         const passValue = DOM.authPassInput.value;
 
         if (userValue === AUTH_CONFIG.operatorId && passValue === AUTH_CONFIG.passphrase) {
             // Acceso Concedido: Desbloqueamos la base de datos
-            DOM.authScreen.classList.add('hidden');
-            DOM.nexusMain.classList.remove('hidden');
+            if (DOM.authScreen) DOM.authScreen.classList.add('hidden');
+            if (DOM.nexusMain) DOM.nexusMain.classList.remove('hidden');
+            
+            // Forzar remoción del bloqueo general si hereda clases de la plantilla vieja
+            const alternativeAuthContainer = document.querySelector('.terminal-container');
+            if (alternativeAuthContainer) alternativeAuthContainer.classList.remove('hidden-until-auth');
+            
             pushLogToTerminal(`OPERATOR ${userValue} VERIFIED. SECURITY LEVEL 5 LINK ESTABLISHED.`);
             initializeSystemClock(); // El reloj empieza a correr al entrar al sistema
         } else {
@@ -101,9 +108,11 @@ function setupAuthentication() {
 
 // 📜 UTILIDAD: INYECTOR DE LOGS EN VIVO
 function pushLogToTerminal(message) {
+    if (!DOM.terminalOutput) return;
     const time = new Date().toTimeString().split(' ')[0];
     const logLine = document.createElement('div');
-    logLine.textContent = `> [${time}] ${message}`;
+    logLine.className = "log-line";
+    logLine.innerHTML = `<span style="color: rgba(255,42,95,0.5)">[${time}]</span> > ${message}`;
     DOM.terminalOutput.appendChild(logLine);
     DOM.terminalOutput.scrollTop = DOM.terminalOutput.scrollHeight; // Auto-scroll
 }
@@ -126,7 +135,6 @@ const NAV_DOM = {
     currentTitle: document.getElementById('current-db-title'),
     promptScreen: document.getElementById('system-prompt-screen'),
     entityView: document.getElementById('active-entity-view'),
-    // Elementos internos de la ficha para pruebas de flujo
     entName: document.getElementById('ent-name'),
     entCategory: document.getElementById('ent-category')
 };
@@ -146,18 +154,16 @@ function initializeDatabaseMenu() {
             const category = selectedButton.getAttribute('data-category');
             const categoryName = selectedButton.textContent.trim();
 
-            // 4. Actualizar título del Viewport Principal
-            NAV_DOM.currentTitle.textContent = `NEXUS DATABASE // ${categoryName}`;
+            // 4. Actualizar título del Viewport Principal si existe
+            if (NAV_DOM.currentTitle) {
+                NAV_DOM.currentTitle.textContent = `NEXUS DATABASE // ${categoryName}`;
+            }
 
             // 5. Flujo Visual: Retirar prompt de espera y desplegar ficha vacía lista para el JSON
-            NAV_DOM.promptScreen.classList.add('hidden');
-            NAV_DOM.entityView.classList.remove('hidden');
+            if (NAV_DOM.promptScreen) NAV_DOM.promptScreen.classList.add('hidden');
+            if (NAV_DOM.entityView) NAV_DOM.entityView.classList.remove('hidden');
 
-            // Simulación de carga en ficha técnica antes de conectar la Base de Datos JSON
-            NAV_DOM.entCategory.textContent = category.toUpperCase();
-            NAV_DOM.entName.textContent = `STREAMING ${category.toUpperCase()} CORE...`;
-
-            // Enviar log de rastreo a la terminal derecha
+            // Sincronizar logs e inyectar el primer nodo del JSON mediante el acoplamiento integrado
             pushLogToTerminal(`NEXUS_REQ: ACCESSING CHANNEL [${category.toUpperCase()}]. FETCHING DATA NODES...`);
         });
     });
@@ -178,9 +184,6 @@ function initializeTabSystem() {
 
             // 3. Informar al terminal sobre el cambio de segmento de memoria
             pushLogToTerminal(`MEM_SWAP: MEMORY CORE BUFFER SHIFTED TO [${targetTabName}].`);
-            
-            // NOTA: En la Parte 5, aquí incluiremos la lógica que oculta/muestra los contenedores
-            // específicos de Atributos, Historial o Modificaciones de la ficha.
         });
     });
 }
@@ -210,68 +213,60 @@ const HUD_DOM = {
 
 // 📈 MOTOR DE TELEMETRÍA DE HARDWARE DE ALTA DENSIDAD
 function startHardwareSimulation() {
-    // Valores base operativos militares
     let baseRam = 4.2;
     let basePower = 88;
 
     setInterval(() => {
         // 1. Fluctuación de la CPU (Cálculo táctico entre 3% y 24% en reposo)
         const currentCpu = Math.floor(Math.random() * 21) + 3;
-        HUD_DOM.cpuLoad.textContent = `${String(currentCpu).padStart(2, '0')}%`;
+        if (HUD_DOM.cpuLoad) HUD_DOM.cpuLoad.textContent = `${String(currentCpu).padStart(2, '0')}%`;
 
-        // 2. Fluctuación de Ancho de Banda (Simula descargas de datos del Nexus)
+        // 2. Fluctuación de Ancho de Banda
         const currentBandwidth = (Math.random() * 8 + 1).toFixed(1);
-        HUD_DOM.bandwidthLoad.textContent = `${currentBandwidth} MB/S`;
+        if (HUD_DOM.bandwidthLoad) HUD_DOM.bandwidthLoad.textContent = `${currentBandwidth} MB/S`;
 
-        // 3. Fluctuación sutil de RAM (Variación microscópica de consumo)
+        // 3. Fluctuación sutil de RAM
         const ramDrift = (Math.random() * 0.2 - 0.1);
         const currentRam = Math.min(Math.max(baseRam + ramDrift, 3.8), 5.4).toFixed(1);
-        HUD_DOM.ramLoad.textContent = `${currentRam} GB`;
+        if (HUD_DOM.ramLoad) HUD_DOM.ramLoad.textContent = `${currentRam} GB`;
 
         // 4. Fluctuación Térmica correlacionada con el uso de la CPU
         const targetThermal = Math.min(30 + currentCpu, 95);
-        HUD_DOM.thermalFill.style.width = `${targetThermal}%`;
+        if (HUD_DOM.thermalFill) HUD_DOM.thermalFill.style.width = `${targetThermal}%`;
 
         // 5. Degradación e inyección de energía lenta en la APU (Batería)
         if (Math.random() > 0.85) {
             basePower = basePower + (Math.random() > 0.5 ? 1 : -1);
             basePower = Math.min(Math.max(basePower, 80), 100);
-            HUD_DOM.powerFill.style.width = `${basePower}%`;
+            if (HUD_DOM.powerFill) HUD_DOM.powerFill.style.width = `${basePower}%`;
         }
 
-    }, 2000); // Actualización de ciclos cada 2 segundos
+    }, 2000);
 }
 
-/* ☠ SISTEMA DEFENSIVO: DISPARADOR DE INTENSIFICACIÓN DE BLACK ICE
-   Esta función la llamaremos mediante eventos de hackeo o alertas críticas */
+/* ☠ SISTEMA DEFENSIVO: DISPARADOR DE INTENSIFICACIÓN DE BLACK ICE */
 function triggerBlackIceAlert(iceName = "RAVEN_DAEMON.EXE") {
-    // Cambiar clases CSS del monitor para detonar animaciones de pulso rojo (Bloque 6 CSS)
+    if (!HUD_DOM.iceMonitor) return;
     HUD_DOM.iceMonitor.classList.remove('ice-safe');
     HUD_DOM.iceMonitor.classList.add('ice-danger');
     
-    // Inyección de cadenas de datos en el monitor de intrusión
-    HUD_DOM.iceStatusText.textContent = "CRITICAL_INTRUSION";
-    HUD_DOM.iceType.textContent = iceName.toUpperCase();
+    if (HUD_DOM.iceStatusText) HUD_DOM.iceStatusText.textContent = "CRITICAL_INTRUSION";
+    if (HUD_DOM.iceType) HUD_DOM.iceType.textContent = iceName.toUpperCase();
 
-    // Notificaciones y logs de combate en red
     pushLogToTerminal(`🚨 KERNEL_ALERT: COUNTER-INTRUSION DETECTED! BLACK ICE [${iceName.toUpperCase()}] IS LOCKING CORES.`);
 }
 
-// Apagar alerta y restablecer estado seguro de red
 function clearBlackIceAlert() {
+    if (!HUD_DOM.iceMonitor) return;
     HUD_DOM.iceMonitor.classList.remove('ice-danger');
     HUD_DOM.iceMonitor.classList.add('ice-safe');
-    HUD_DOM.iceStatusText.textContent = "ICE_CLEAN";
-    HUD_DOM.iceType.textContent = "NONE DETECTED";
-    pushLogToTerminal("SYS_MAINT: BLACK ICE PURGED SUCCESSFULLY. DEFENSIIVE NODES RESTORED.");
+    if (HUD_DOM.iceStatusText) HUD_DOM.iceStatusText.textContent = "ICE_CLEAN";
+    if (HUD_DOM.iceType) HUD_DOM.iceType.textContent = "NONE DETECTED";
+    pushLogToTerminal("SYS_MAINT: BLACK ICE PURGED SUCCESSFULLY. DESTRUCTIVE NODES RESTORED.");
 }
 
-// INYECCIÓN EN EL FILTRO DE CONTROL DOM
 document.addEventListener("DOMContentLoaded", () => {
     startHardwareSimulation();
-    
-    // Simulación de prueba: Descomenta la línea de abajo si quieres ver el pulso rojo de Black ICE desde el inicio
-    // triggerBlackIceAlert("Hellhound_V3");
 });
 
 /* ==========================================================================
@@ -279,7 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
    PARTE 4 — JAVASCRIPT (BLOQUE 4: DRAG & DROP, AUDIO MATRIX & ALERTS)
    ========================================================================== */
 
-// REGISTRO DE SELECTORES COMPLEMENTARIOS
 const SYS_DOM = {
     floatingWindows: document.querySelectorAll('.floating-window'),
     closeButtons: document.querySelectorAll('.win-close'),
@@ -293,19 +287,15 @@ function setupWindowDragAndDrop() {
     let offsetX = 0;
     let offsetY = 0;
 
-    // Escuchar el clic en la cabecera de la ventana
     document.querySelectorAll('.window-header').forEach(header => {
         header.addEventListener('mousedown', (e) => {
-            // Evitar conflictos con el botón de cerrar
             if (e.target.classList.contains('win-close')) return;
 
             activeWindow = header.parentElement;
             
-            // Traer la ventana al frente (Z-Index más alto)
             document.querySelectorAll('.floating-window').forEach(win => win.style.zIndex = "1000");
             activeWindow.style.zIndex = "1050";
 
-            // Calcular la distancia entre el mouse y la esquina de la ventana
             const rect = activeWindow.getBoundingClientRect();
             offsetX = e.clientX - rect.left;
             offsetY = e.clientY - rect.top;
@@ -318,11 +308,9 @@ function setupWindowDragAndDrop() {
     function mouseMoveHandler(e) {
         if (!activeWindow) return;
         
-        // Calcular nuevas coordenadas en la pantalla
         let newX = e.clientX - offsetX;
         let newY = e.clientY - offsetY;
 
-        // Limitar el movimiento dentro de la pantalla para evitar perder la ventana
         newX = Math.max(0, Math.min(newX, window.innerWidth - activeWindow.offsetWidth));
         newY = Math.max(0, Math.min(newY, window.innerHeight - activeWindow.offsetHeight));
 
@@ -353,14 +341,13 @@ function setupWindowControls() {
     });
 }
 
-// 🔊 CONTROLADOR DE CONFIGURACIÓN DE AUDIO (CONSOLA DE MEZCLA)
+// 🔊 CONTROLADOR DE CONFIGURACIÓN DE AUDIO
 function setupAudioMatrix() {
     SYS_DOM.audioSliders.forEach(slider => {
         slider.addEventListener('input', (e) => {
             const channel = e.target.id.toUpperCase();
             const volume = e.target.value;
-            // Registra el cambio en la terminal de logs
-            if (Math.random() > 0.7) { // Evita saturar el log al deslizar rápido
+            if (Math.random() > 0.7) { 
                 pushLogToTerminal(`AUDIO_MIX: CHANNEL [${channel}] VOLUME DEVIATION AT ${volume}%.`);
             }
         });
@@ -369,16 +356,14 @@ function setupAudioMatrix() {
 
 // 🚨 COMPONENTE DE GENERACIÓN DE NOTIFICACIONES DINÁMICAS
 function spawnNotification(message, type = "success") {
+    if (!SYS_DOM.notificationContainer) return;
     const alertDiv = document.createElement('div');
     alertDiv.className = `notification ${type}`;
     alertDiv.textContent = message.toUpperCase();
 
     SYS_DOM.notificationContainer.appendChild(alertDiv);
-    
-    // Enviar rastro al terminal log
     pushLogToTerminal(`NOTIFY_CORE: STATUS_${type.toUpperCase()} // ${message}`);
 
-    // Auto-destrucción de la notificación flotante tras 4 segundos
     setTimeout(() => {
         alertDiv.style.opacity = '0';
         alertDiv.style.transition = 'opacity 0.5s ease';
@@ -386,32 +371,31 @@ function spawnNotification(message, type = "success") {
     }, 4000);
 }
 
-// DISPARADOR LOGÍSTICO COMPLETO DEL S.O.
 document.addEventListener("DOMContentLoaded", () => {
     setupWindowDragAndDrop();
     setupWindowControls();
     setupAudioMatrix();
 
-    // Pequeño retardo para lanzar una notificación de bienvenida tras el login
     setTimeout(() => {
-        if (!document.getElementById('nexus').classList.contains('hidden')) {
+        const nex = document.getElementById('nexus');
+        if (nex && !nex.classList.contains('hidden')) {
             spawnNotification("Nexus Cyber-Defense Core Active", "success");
         }
     }, 2000);
 });
 
 /* ==========================================================================
-   NEON HEAVEN // NEXUS DATABASE
-   PARTE 5 — MOTOR DE INYECCIÓN DE DATOS JSON DINEÁMICOS
+   NEON HEAVEN // PARTE 5 & 6 — MOTOR DE INYECCIÓN JSON & PAGINACIÓN INTERACTIVA
    ========================================================================== */
 
-let localDatabaseCache = null; // Guardará los datos del JSON una vez descargados
+let localDatabaseCache = null; 
+let currentCategory = "arms";  // Rastrear categoría activa global
+let currentEntityIndex = 0;    // Rastrear índice activo global
 
 // 📥 FUNCIÓN DE DESCARGA: CONECTAR ARCHIVO JSON
 async function fetchNexusDatabase() {
     try {
         pushLogToTerminal("NET_REQ: ESTABLISHING JSON DATASTREAM LINK...");
-        // Buscamos el archivo local que acabas de crear
         const response = await fetch('./database.json');
         
         if (!response.ok) throw new Error("HTTP_ERROR // UNABLE TO REACH DATABASE.JSON");
@@ -424,69 +408,102 @@ async function fetchNexusDatabase() {
     }
 }
 
-// 🏛️ INYECTOR EN EL VIEWPORT CENTRAL
+// 🏛️ INYECTOR EN EL VIEWPORT CENTRAL MODIFICADO (SOPORTE MASIVO DE 300+ LÍNEAS)
 function renderEntityData(category, index = 0) {
     if (!localDatabaseCache || !localDatabaseCache[category]) {
         pushLogToTerminal(`⚠️ DB_WARN: CATEGORY [${category.toUpperCase()}] CONTENT IS CURRENTLY ENCRYPTED OR EMPTY.`);
         return;
     }
 
+    const totalElements = localDatabaseCache[category].length;
     const entity = localDatabaseCache[category][index];
     if (!entity) return;
 
-    // 1. Inyectar Textos Básicos e Identificadores
-    document.getElementById('ent-name').textContent = entity.name.toUpperCase();
-    document.getElementById('ent-serial').textContent = entity.serial;
-    document.getElementById('ent-tag').textContent = entity.tag;
-    document.getElementById('ent-desc').textContent = entity.description;
+    // Actualizar marcadores de memoria de la sesión
+    currentCategory = category;
+    currentEntityIndex = index;
+
+    // [MODIFICACIÓN PASO 6]: Sincronizar el contador visual cuántico superior (Ej: "1 / 3")
+    const counterElement = document.getElementById('nav-entity-counter');
+    if (counterElement) {
+        counterElement.textContent = `${index + 1} / ${totalElements}`;
+    }
+
+    // 1. Inyectar Textos Básicos e Identificadores en el Visor Reconstruido
+    if (document.getElementById('ent-name')) document.getElementById('ent-name').textContent = entity.name.toUpperCase();
+    if (document.getElementById('ent-serial')) document.getElementById('ent-serial').textContent = entity.serial;
+    if (document.getElementById('ent-tag')) document.getElementById('ent-tag').textContent = entity.tag;
+    if (document.getElementById('ent-desc')) document.getElementById('ent-desc').textContent = entity.description;
+
+    // Compatibilidad con nodos de simulación antiguos de tu Bloque 2 si existen
+    if (NAV_DOM.entCategory) NAV_DOM.entCategory.textContent = category.toUpperCase();
 
     // 2. Control Visual de la Imagen/Holograma Táctico
     const imgElement = document.getElementById('entity-image');
-    if (entity.image) {
-        imgElement.src = entity.image;
-        imgElement.classList.remove('hidden');
-    } else {
-        imgElement.classList.add('hidden'); // Ocultar si la entidad no requiere imagen (ej: Ciberware)
+    if (imgElement) {
+        if (entity.image && entity.image !== "") {
+            imgElement.src = entity.image;
+            imgElement.classList.remove('hidden');
+        } else {
+            imgElement.classList.add('hidden'); 
+        }
     }
 
-    // 3. Inyectar Barras de Atributos Dinámicas con porcentajes exactos del JSON
+    // 3. Inyectar Barras de Atributos Dinámicas con porcentajes del reglamento Cyberpunk RED
     const barsContainer = document.getElementById('attribute-bars');
-    barsContainer.innerHTML = ""; // Limpiar barras anteriores
+    if (barsContainer) {
+        barsContainer.innerHTML = ""; 
+        Object.entries(entity.stats).forEach(([statName, statValue]) => {
+            const attrDiv = document.createElement('div');
+            attrDiv.className = "attribute";
+            attrDiv.innerHTML = `
+                <label>${statName.toUpperCase()}</label>
+                <div class="bar">
+                    <div class="fill" style="width: ${statValue}%"></div>
+                </div>
+            `;
+            barsContainer.appendChild(attrDiv);
+        });
+    }
 
-    Object.entries(entity.stats).forEach(([statName, statValue]) => {
-        const attrDiv = document.createElement('div');
-        attrDiv.className = "attribute";
-        attrDiv.innerHTML = `
-            <label>${statName.toUpperCase()}</label>
-            <div class="bar">
-                <div class="fill" style="width: ${statValue}%"></div>
-            </div>
-        `;
-        barsContainer.appendChild(attrDiv);
-    });
-
-    // 4. Inyectar Slots de Modificaciones de Equipamiento
+    // 4. Inyectar Slots de Modificaciones de Equipamiento (Hardware Mods Matrix)
     const modsGrid = document.querySelector('.mods-grid');
-    modsGrid.innerHTML = ""; // Limpiar slots anteriores
+    if (modsGrid) {
+        modsGrid.innerHTML = ""; 
+        entity.mods.forEach(modName => {
+            const modCard = document.createElement('div');
+            if (modName.toLowerCase().includes('vacío') || modName.toLowerCase().includes('empty')) {
+                modCard.className = "mod-card empty";
+                modCard.textContent = "[ SLOT_EMPTY ]";
+            } else {
+                modCard.className = "mod-card";
+                modCard.textContent = modName;
+            }
+            modsGrid.appendChild(modCard);
+        });
+    }
 
-    entity.mods.forEach(modName => {
-        const modCard = document.createElement('div');
-        // Si el texto dice "Slot Vacío", le damos un diseño diferente
-        if (modName.toLowerCase().includes('vacío') || modName.toLowerCase().includes('empty')) {
-            modCard.className = "mod-card empty";
-            modCard.textContent = "[ EMPTY_SLOT ]";
-        } else {
-            modCard.className = "mod-card";
-            modCard.textContent = modName;
-        }
-        modsGrid.appendChild(modCard);
-    });
+    // 5. [MODIFICACIÓN ADAPTATIVA]: Inyectar sub-bloques intermedios de inteligencia de terreno
+    const intelStatus = document.getElementById('intel-status-val');
+    const intelClass = document.getElementById('intel-class-val');
+    if (intelStatus && entity.intel_status) intelStatus.textContent = entity.intel_status;
+    if (intelClass && entity.intel_class) intelClass.textContent = entity.intel_class;
+
+    // 6. [MODIFICACIÓN ADAPTATIVA]: Inyectar las 4 tarjetas de telemetría de diagnóstico en el panel del Footer
+    const metaDepth = document.getElementById('meta-architecture-depth');
+    const metaOverflow = document.getElementById('meta-overflow-risk');
+    const metaLoad = document.getElementById('meta-deck-load');
+    const metaCounter = document.getElementById('meta-countermeasures');
+
+    if (metaDepth && entity.meta_depth) metaDepth.textContent = entity.meta_depth;
+    if (metaOverflow && entity.meta_overflow) metaOverflow.textContent = entity.meta_overflow;
+    if (metaLoad && entity.meta_load) metaLoad.textContent = entity.meta_load;
+    if (metaCounter && entity.meta_countermeasures) metaCounter.textContent = entity.meta_countermeasures;
 
     pushLogToTerminal(`DB_RENDER: ENTITY [${entity.id.toUpperCase()}] LOADED INTO VIRTUAL MEMORY BUFFER.`);
 }
 
-/* 🔄 ACOPLAMIENTO CON TU MENÚ EXISTENTE
-   Modificamos el listener del menú lateral para que use el inyector JSON */
+// ACOPLAMIENTO OPTIMIZADO CON TU MENÚ EXISTENTE
 function upgradeMenuWithJSON() {
     const menuButtons = document.querySelectorAll('.database-menu .menu-item');
     
@@ -494,20 +511,59 @@ function upgradeMenuWithJSON() {
         button.addEventListener('click', (e) => {
             const category = e.currentTarget.getAttribute('data-category');
             
-            // Si la categoría tiene datos en el JSON, la inyectamos de inmediato
             if (localDatabaseCache && localDatabaseCache[category]) {
                 setTimeout(() => {
-                    renderEntityData(category, 0); // Cargamos el primer registro por defecto
-                }, 150); // Pequeño retraso de procesamiento estético
+                    renderEntityData(category, 0); // Al cambiar de menú arranca siempre en el índice 0
+                }, 150); 
             }
         });
     });
 }
 
-// INICIALIZACIÓN COMPLEMENTARIA
+// [MODIFICACIÓN PASO 6]: DISPARADOR DE LISTENERS PARA NAVEGACIÓN DE FLECHAS (◀ ▶)
+function setupPaginationListeners() {
+    const btnPrev = document.getElementById('nav-prev-entity');
+    const btnNext = document.getElementById('nav-next-entity');
+
+    if (!btnPrev || !btnNext) return;
+
+    // Controlador Flecha de Retroceso ◀
+    btnPrev.addEventListener('click', () => {
+        if (!localDatabaseCache || !localDatabaseCache[currentCategory]) return;
+        const total = localDatabaseCache[currentCategory].length;
+        
+        let newIndex = currentEntityIndex - 1;
+        if (newIndex < 0) newIndex = total - 1; // Salto infinito al último registro
+        
+        pushLogToTerminal(`NAV_TRACK: SHIFTING NEURAL BUFFER BACKWARD...`);
+        renderEntityData(currentCategory, newIndex);
+    });
+
+    // Controlador Flecha de Avance ▶
+    btnNext.addEventListener('click', () => {
+        if (!localDatabaseCache || !localDatabaseCache[currentCategory]) return;
+        const total = localDatabaseCache[currentCategory].length;
+        
+        let newIndex = currentEntityIndex + 1;
+        if (newIndex >= total) newIndex = 0; // Salto infinito de reinicio al primer registro
+        
+        pushLogToTerminal(`NAV_TRACK: SHIFTING NEURAL BUFFER FORWARD...`);
+        renderEntityData(currentCategory, newIndex);
+    });
+}
+
+// INICIALIZACIÓN COMPLEMENTARIA UNIFICADA
 document.addEventListener("DOMContentLoaded", async () => {
     await fetchNexusDatabase(); // Descargar el archivo al encender la computadora
     upgradeMenuWithJSON();      // Enlazar los botones con el inyector
+    setupPaginationListeners(); // Encender el carrusel interactivo del paso 6
+    
+    // Auto-render de la categoría inicial de armas al pasar el bypass
+    setTimeout(() => {
+        if (localDatabaseCache && localDatabaseCache["arms"]) {
+            renderEntityData("arms", 0);
+        }
+    }, 1200);
 });
 
 /* ==========================================================================
@@ -515,6 +571,7 @@ document.addEventListener("DOMContentLoaded", async () => {
    ========================================================================== */
 function setupDatabaseSearch() {
     const searchInput = document.getElementById('search');
+    if (!searchInput) return;
 
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
@@ -522,7 +579,6 @@ function setupDatabaseSearch() {
 
         if (!localDatabaseCache) return;
 
-        // Recorrer todas las categorías buscando coincidencias en el nombre o serial
         for (const category in localDatabaseCache) {
             const foundIndex = localDatabaseCache[category].findIndex(item => 
                 item.name.toLowerCase().includes(query) || 
@@ -530,24 +586,26 @@ function setupDatabaseSearch() {
             );
 
             if (foundIndex !== -1) {
-                // Si encontramos coincidencia, activamos visualmente la sección y renderizamos
                 const correspondingButton = document.querySelector(`.menu-item[data-category="${category}"]`);
                 if (correspondingButton) {
                     document.querySelectorAll('.database-menu .menu-item').forEach(btn => btn.classList.remove('active'));
                     correspondingButton.classList.add('active');
-                    NAV_DOM.currentTitle.textContent = `NEXUS DATABASE // ${correspondingButton.textContent.trim()}`;
+                    if (NAV_DOM.currentTitle) {
+                        NAV_DOM.currentTitle.textContent = `NEXUS DATABASE // ${correspondingButton.textContent.trim()}`;
+                    }
                 }
 
-                NAV_DOM.promptScreen.classList.add('hidden');
-                NAV_DOM.entityView.classList.remove('hidden');
+                if (NAV_DOM.promptScreen) NAV_DOM.promptScreen.classList.add('hidden');
+                if (NAV_DOM.entityView) NAV_DOM.entityView.classList.remove('hidden');
+                
+                // Forzar despliegue y actualización de índices globales
                 renderEntityData(category, foundIndex);
-                break; // Detener búsqueda al encontrar el primer resultado válido
+                break; 
             }
         }
     });
 }
 
-// Aseguramos que se ejecute al arrancar el DOM
 document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(setupDatabaseSearch, 1000); // Pequeño delay de inicialización tras el boot
+    setTimeout(setupDatabaseSearch, 1000); 
 });
