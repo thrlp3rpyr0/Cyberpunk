@@ -320,3 +320,17 @@
         "Seguridad Nodos": "90"
       },
       "mods":
+{
+    "id": "nexus-database-bridge",
+    "title": "NEXUS Database for Cyberpunk RED",
+    "description": "Importa armas y cyberware del sistema NEXUS a tus fichas de Foundry.",
+    "version": "1.0.0",
+    "packs": [
+        {
+            "name": "nexus-items",
+            "label": "NEXUS Compendium",
+            "path": "packs/items.db",
+            "type": "Item"
+        }
+    ]
+}
