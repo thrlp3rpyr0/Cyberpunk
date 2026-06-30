@@ -744,7 +744,7 @@ function openFoundry() {
     
     // Redirección a tu Foundry VTT
     // Reemplaza con tu URL real (ej: http://localhost:30000 o tu dominio)
-    const foundryUrl = "http://187.188.225.114:30000/"; 
+    const foundryUrl = "4hsq287g2ice.shares.zrok.io"; 
     
     // Lo abrimos en una pestaña nueva para no cerrar la terminal NEXUS
     window.open(foundryUrl, '_blank');
