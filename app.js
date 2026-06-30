@@ -749,5 +749,5 @@ function openFoundry() {
     // Lo abrimos en una pestaña nueva para no cerrar la terminal NEXUS
     window.open(foundryUrl, '_blank');
     
-    console.log("CORE // ESTABLISHING UPLINK TO FOUNDRY...");
+    console.log("CORE // ESTABLISHING UPLINK TO THE NETWORK...");
 }
